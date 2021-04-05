@@ -28,7 +28,7 @@ public class KitListener implements Listener {
             }
 
             Game game = plugin.getGame(player);
-            if (game.getCurrentPhase() == Phase.FIGHTING) {
+            if (game.getCurrentPhase() == Phase.FIGHTING || game.getCurrentPhase() == Phase.GRACE) {
                 return game.getSelectedKits().get(player) == kit;
             }
 

@@ -5,6 +5,7 @@ import de.superhellth.kitpvp.commands.KitpvpCommand;
 import de.superhellth.kitpvp.game.Game;
 import de.superhellth.kitpvp.kits.*;
 import de.superhellth.kitpvp.listener.BlockPlaceListener;
+import de.superhellth.kitpvp.listener.GraceListener;
 import de.superhellth.kitpvp.listener.PlayerDeathListener;
 import de.superhellth.kitpvp.listener.ReadyListener;
 import de.superhellth.kitpvp.listener.kitlistener.*;
@@ -66,7 +67,8 @@ public final class Kitpvp extends JavaPlugin {
         // Register listener
         registerListeners(new PlayerDeathListener(this),
                 new ReadyListener(this),
-                new BlockPlaceListener());
+                new BlockPlaceListener(),
+                new GraceListener());
 
         // Kit Listener
         registerListeners(new BWListener(this),

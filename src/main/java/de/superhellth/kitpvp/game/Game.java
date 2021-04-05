@@ -1,6 +1,5 @@
 package de.superhellth.kitpvp.game;
 
-import com.sun.istack.internal.NotNull;
 import de.superhellth.kitpvp.kits.Kit;
 import de.superhellth.kitpvp.main.Kitpvp;
 import de.superhellth.kitpvp.ui.Chat;
@@ -20,12 +19,12 @@ public class Game {
 
     // list of game members
     private Player host;
-    private List<Player> members;
-    private List<Player> invited;
-    private Map<Player, Kit> selectedKits;
-    private Map<Player, Boolean> alive;
-    private List<Player> readyPlayers;
-    private List<Block> placedBlocks;
+    private final List<Player> members;
+    private final List<Player> invited;
+    private final Map<Player, Kit> selectedKits;
+    private final Map<Player, Boolean> alive;
+    private final List<Player> readyPlayers;
+    private final List<Block> placedBlocks;
 
     public Game(Player host) {
         this.host = host;
@@ -77,12 +76,40 @@ public class Game {
                     + ChatColor.BOLD + selectedKits.get(player).getName() + "§r" + Chat.BASE_COLOR + "!");
         }
 
+        // set grace period
         currentPhase = Phase.GRACE;
+        //int timeToCD = 4 * 60 + 49;
+        int timeToCD = 2 * 60;
+        broadcastDelayedMessage(ChatColor.BOLD + "The grace period will end in...\n 10 seconds", timeToCD);
+        for (int c = 0; c < 10; c++) {
+            broadcastDelayedMessage(ChatColor.BOLD + "" + (10 - c) + "", timeToCD + 1 + c);
+        }
+
         // setup world border
         setupWorldAndPlayerPosition();
         deployKits();
-        currentPhase = Phase.FIGHTING;
-        broadcast(ChatColor.BOLD + "You are now in the fighting phase, the last to survive wins!");
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Kitpvp.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                currentPhase = Phase.FIGHTING;
+                broadcast(ChatColor.BOLD + "You are now in the fighting phase, the last to survive wins!");
+            }
+        }, timeToCD * 20 + 10 * 20);
+    }
+
+    /**
+     * Broadcast a message to all game members
+     *
+     * @param message
+     * @param delay in seconds
+     */
+    private void broadcastDelayedMessage(String message, int delay) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Kitpvp.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                broadcast(message);
+            }
+        }, 20L * delay);
     }
 
     // Basic player actions
@@ -128,7 +155,6 @@ public class Game {
     }
 
     // get current phase
-    @NotNull
     public Phase getCurrentPhase() {
         return currentPhase;
     }
