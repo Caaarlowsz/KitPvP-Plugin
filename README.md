@@ -44,4 +44,6 @@ A mc-spigot plugin for kit pvp
 > Sets the center for the border(generated when game starts) to the current location of the player executing the command  
 
 /kp config mapsize _size_  
-> Sets the mapsize(length of one side) to the value of <int>
+> Sets the mapsize(length of one side) to the value of <int>  
+
+**Replace words written in _italic_ with custom values**
