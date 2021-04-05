@@ -1,5 +1,5 @@
 # server
-server/logs/*
+src/test/java
 
 # show config
 !config.yml
