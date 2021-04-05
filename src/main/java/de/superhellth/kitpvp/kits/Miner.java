@@ -60,5 +60,7 @@ public class Miner extends Kit {
     public void setEffects() {
         PotionEffect nightVision = new PotionEffect(PotionEffectType.NIGHT_VISION, 999999 * 20, 0);
         effects.add(nightVision);
+        PotionEffect haste = new PotionEffect(PotionEffectType.FAST_DIGGING, 999999 * 20, 0);
+        effects.add(haste);
     }
 }

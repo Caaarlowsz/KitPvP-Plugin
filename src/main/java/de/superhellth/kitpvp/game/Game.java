@@ -1,5 +1,6 @@
 package de.superhellth.kitpvp.game;
 
+import com.sun.istack.internal.NotNull;
 import de.superhellth.kitpvp.kits.Kit;
 import de.superhellth.kitpvp.main.Kitpvp;
 import de.superhellth.kitpvp.ui.Chat;
@@ -127,6 +128,7 @@ public class Game {
     }
 
     // get current phase
+    @NotNull
     public Phase getCurrentPhase() {
         return currentPhase;
     }

@@ -1,5 +1,6 @@
 package de.superhellth.kitpvp.main;
 
+import com.sun.istack.internal.NotNull;
 import de.superhellth.kitpvp.commands.KitpvpCommand;
 import de.superhellth.kitpvp.game.Game;
 import de.superhellth.kitpvp.kits.*;
@@ -66,11 +67,11 @@ public final class Kitpvp extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
 
         // Kit Listener
-        getServer().getPluginManager().registerEvents(new EndermanListener(), this);
-        getServer().getPluginManager().registerEvents(new LumberListener(), this);
-        getServer().getPluginManager().registerEvents(new BWListener(), this);
-        getServer().getPluginManager().registerEvents(new ZeusListener(), this);
-        getServer().getPluginManager().registerEvents(new WitchListener(), this);
+        getServer().getPluginManager().registerEvents(new EndermanListener(this), this);
+        getServer().getPluginManager().registerEvents(new LumberListener(this), this);
+        getServer().getPluginManager().registerEvents(new BWListener(this), this);
+        getServer().getPluginManager().registerEvents(new ZeusListener(this), this);
+        getServer().getPluginManager().registerEvents(new WitchListener(this), this);
     }
 
     @Override
@@ -119,8 +120,8 @@ public final class Kitpvp extends JavaPlugin {
     }
 
     // finds game player currently is in
+    @NotNull
     public Game getGame(Player player) {
-        Game game = null;
         for (Game aGame : games) {
             if (aGame.playedBy(player)) {
                 return aGame;

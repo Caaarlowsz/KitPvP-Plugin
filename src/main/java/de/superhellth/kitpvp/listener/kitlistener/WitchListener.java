@@ -14,11 +14,12 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WitchListener implements Listener {
+public class WitchListener extends KitListener {
 
     List<PotionEffectType> ignore;
 
-    public WitchListener() {
+    public WitchListener(Kitpvp plugin) {
+        super(plugin);
         ignore = new ArrayList<>();
         ignore.add(PotionEffectType.POISON);
         ignore.add(PotionEffectType.HARM);
@@ -32,15 +33,10 @@ public class WitchListener implements Listener {
             return;
         }
         Player player = (Player) event.getEntity();
-        if (Kitpvp.getInstance().isInGame(player)) {
-            Game game = Kitpvp.getInstance().getGame(player);
-            if (game.getCurrentPhase() == Phase.fighting) {
-                if (game.getSelectedKits().get(player) == Witch.getInstance()) {
-                    if (event.getAction() == EntityPotionEffectEvent.Action.ADDED) {
-                        if (ignore.contains(event.getModifiedType())) {
-                            event.setCancelled(true);
-                        }
-                    }
+        if (checkCondition(player, Witch.getInstance())) {
+            if (event.getAction() == EntityPotionEffectEvent.Action.ADDED) {
+                if (ignore.contains(event.getModifiedType())) {
+                    event.setCancelled(true);
                 }
             }
         }
@@ -52,36 +48,10 @@ public class WitchListener implements Listener {
             return;
         }
         Player player = (Player) event.getEntity();
-        if (Kitpvp.getInstance().isInGame(player)) {
-            Game game = Kitpvp.getInstance().getGame(player);
-            if (game.getCurrentPhase() == Phase.fighting) {
-                if (game.getSelectedKits().get(player) == Witch.getInstance()) {
-                    player.sendMessage(event.getCause().name());
-                    if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
-                        event.setCancelled(true);
-                    }
-                }
+        if (checkCondition(player, Witch.getInstance())) {
+            if (event.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
+                event.setCancelled(true);
             }
         }
     }
-
-    /*
-    @EventHandler
-    public void onAreaEffectCloudApplyEvent(AreaEffectCloudApplyEvent event) {
-        if (!(event.getEntity() instanceof Player)) {
-            return;
-        }
-        Player player = (Player) event.getEntity();
-        if (Kitpvp.getInstance().isInGame(player)) {
-            Game game = Kitpvp.getInstance().getGame(player);
-            if (game.getCurrentPhase() == Phase.fighting) {
-                if (game.getSelectedKits().get(player) == Witch.getInstance()) {
-                    if (ignore.contains(event.getEntity().get())) {
-                        event.setCancelled(true);
-                    }
-                }
-            }
-        }
-    }
-*/
 }

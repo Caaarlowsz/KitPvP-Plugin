@@ -12,21 +12,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-public class BWListener implements Listener {
+public class BWListener extends KitListener {
+
+    public BWListener(Kitpvp plugin) {
+        super(plugin);
+    }
 
     @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
-        if (!(Kitpvp.getInstance().isInGame(player))) {
-            return;
-        }
         Game game = Kitpvp.getInstance().getGame(player);
-        if (game.getCurrentPhase() == Phase.fighting) {
-            if (game.getSelectedKits().get(player) == BW.getInstance()) {
-                if (!(game.getPlacedBlocks().contains(block))) {
-                    event.setCancelled(true);
-                }
+        if (checkCondition(player, BW.getInstance())) {
+            if (!(game.getPlacedBlocks().contains(block))) {
+                event.setCancelled(true);
             }
         }
     }

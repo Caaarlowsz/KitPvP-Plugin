@@ -16,11 +16,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LumberListener implements Listener {
+public class LumberListener extends KitListener {
 
     private List<Material> logs;
 
-    public LumberListener() {
+    public LumberListener(Kitpvp plugin) {
+        super(plugin);
         logs = new ArrayList<>();
         logs.add(Material.OAK_LOG);
         logs.add(Material.BIRCH_LOG);
@@ -34,32 +35,29 @@ public class LumberListener implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         Location blockLoc = block.getLocation();
-        if (!(Kitpvp.getInstance().isInGame(player))) {
-            return;
-        }
-        Game game = Kitpvp.getInstance().getGame(player);
-        if (game.getCurrentPhase() == Phase.fighting) {
-            if (game.getSelectedKits().get(player) == Lumber.getInstance()) {
-                if (player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.DURABILITY) == 10) {
-                    if (logs.contains(block.getType())) {
-
-                        // scan tree for more oak logs
-                        for (int y = -31; y < 31; y++) {
-                            for (int x = -2; x < 2; x++) {
-                                for (int z = -2; z < 2; z++) {
-                                    Location newLocation = new Location(blockLoc.getWorld(), blockLoc.getBlockX() + x,
-                                            blockLoc.getBlockY() + y, blockLoc.getBlockZ() + z);
-                                    Block newBlock = newLocation.getBlock();
-                                    if (logs.contains(newBlock.getType())) {
-                                        newBlock.breakNaturally();
-                                    }
-                                }
-                            }
-                        }
-                    }
+        if (checkCondition(player, Lumber.getInstance())) {
+            if (player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.DURABILITY) == 10) {
+                if (logs.contains(block.getType())) {
+                    chopTree(blockLoc);
                 }
             }
         }
     }
 
+    // chop tree
+    private void chopTree(Location blockLoc) {
+        // scan tree for more oak logs
+        for (int y = -31; y < 31; y++) {
+            for (int x = -2; x < 2; x++) {
+                for (int z = -2; z < 2; z++) {
+                    Location newLocation = new Location(blockLoc.getWorld(), blockLoc.getBlockX() + x,
+                            blockLoc.getBlockY() + y, blockLoc.getBlockZ() + z);
+                    Block newBlock = newLocation.getBlock();
+                    if (logs.contains(newBlock.getType())) {
+                        newBlock.breakNaturally();
+                    }
+                }
+            }
+        }
+    }
 }

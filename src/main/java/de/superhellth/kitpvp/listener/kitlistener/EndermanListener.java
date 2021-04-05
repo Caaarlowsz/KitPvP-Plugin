@@ -20,20 +20,18 @@ import org.bukkit.util.BlockIterator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EndermanListener implements Listener {
+public class EndermanListener extends KitListener {
+
+    public EndermanListener(Kitpvp plugin) {
+        super(plugin);
+    }
 
     @EventHandler
     public void onPlayerTeleportEvent(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
-        if (!(Kitpvp.getInstance().isInGame(player))) {
-            return;
-        }
-        Game game = Kitpvp.getInstance().getGame(player);
-        if (game.getCurrentPhase() == Phase.fighting) {
+        if (checkCondition(player, Enderman.getInstance())) {
             if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
-                if (game.getSelectedKits().get(player) == Enderman.getInstance()) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 10, 10, false));
-                }
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 10, 10, false));
             }
         }
     }
@@ -41,19 +39,17 @@ public class EndermanListener implements Listener {
     @EventHandler
     public void onPlayerSneakEvent(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
-        if (!(Kitpvp.getInstance().isInGame(player))) {
-            return;
-        }
-        Game game = Kitpvp.getInstance().getGame(player);
-        if (game.getCurrentPhase() == Phase.fighting) {
-            if (game.getSelectedKits().get(player) == Enderman.getInstance()) {
-                if (event.isSneaking()) {
-                    Player target = getTarget(player);
-                    Location loc1 = player.getLocation();
-                    Location loc2 = target.getLocation();
-                    player.teleport(loc2);
-                    target.teleport(loc1);
+
+        if (checkCondition(player, Enderman.getInstance())) {
+            if (event.isSneaking()) {
+                Player target = getTarget(player);
+                if (target == null) {
+                    return;
                 }
+                Location loc1 = player.getLocation();
+                Location loc2 = target.getLocation();
+                player.teleport(loc2);
+                target.teleport(loc1);
             }
         }
     }
