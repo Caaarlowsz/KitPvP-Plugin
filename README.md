@@ -76,3 +76,9 @@ A mc-spigot plugin for kit pvp
 > Sets the mapsize(length of one side) to the value of <int>  
 
 **Replace words written in _italic_ with custom values**
+
+## Look out for in the future:
+* A permission management system
+* More kits
+* More special abilities like the Lumber, BW and Enderman Kit have
+* More room for customization
