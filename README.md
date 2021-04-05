@@ -2,6 +2,7 @@
 A mc-spigot plugin for kit pvp
 
 ## Kits:  
+### You can choose from the following kits:  
 * **Jesus**  
   * Totem of Undying
   * Can walk on water
@@ -32,7 +33,16 @@ A mc-spigot plugin for kit pvp
 * **Enchanter**
   * Has all you need to enchant your gear
 * **Trapper**
-  * Can trap his opponents with a variety of redstone materials
+  * Can trap his opponents with a variety of redstone materials  
+
+### Coming soon
+* **Souper**
+  * A traditional soup kit
+* **Pyro**
+  * Is resistant to any kind of fire damage
+* **Dolphin**
+  * Is quick and strong under water
+  * Isn't too strong on land
 
 ## Commands:
 /kp newgame 
