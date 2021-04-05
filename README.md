@@ -1,6 +1,20 @@
 # KitPvP-Plugin
 A mc-spigot plugin for kit pvp
 
+## Kits:  
+* **Jesus**  
+* **Witch**
+* **Zeus**
+* **MLG**
+* **Rusher**
+* **Enderman**
+* **Miner**
+* **Lumber**
+* **Farmer**
+* **Bedwars**
+* **Enchanter**
+* **Trapper**
+
 ## Commands:
 /kp newgame 
 > Starts a new game  
