@@ -3,9 +3,6 @@ server/*
 !server/plugins
 server/plugins/PluginMetrics
 
-# show config
-!config.yml
-
 # pom.xml
 pom.xml
 

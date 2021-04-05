@@ -13,13 +13,15 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public final class Kitpvp extends JavaPlugin {
+
+    private final Location initCenter = new Location(getServer().getWorlds().get(0), 0, 100, 0);
+    private final int initSize = 300;
 
     public static final String MAP_SETUP = "world-setup";
     public static final String MAP_CENTER = MAP_SETUP + "." + "center";
@@ -41,6 +43,8 @@ public final class Kitpvp extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // check if config exists
+
         // log start message
         log("Plugin started");
         instance = this;
@@ -72,17 +76,20 @@ public final class Kitpvp extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        try {
-            getConfig().save(getConfig().getCurrentPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveConfig();
     }
 
     public void loadConfig() {
         // set map center
-        mapCenter = Location.deserialize(getConfig().getConfigurationSection(MAP_SETUP + "." + MAP_CENTER).getValues(false));
-        mapSize = getConfig().getInt(MAP_SETUP + "." + MAP_SIZE);
+        try {
+            mapCenter = Location.deserialize(getConfig().getConfigurationSection(MAP_CENTER).getValues(false));
+            mapSize = getConfig().getInt(MAP_SIZE);
+        } catch (NullPointerException e) {
+            getConfig().set(MAP_CENTER, initCenter.serialize());
+            getConfig().set(MAP_SIZE, initSize);
+            mapCenter = initCenter;
+            mapSize = initSize;
+        }
     }
 
     // log a message

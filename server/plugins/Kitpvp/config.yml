@@ -1,9 +1,9 @@
 world-setup:
   center:
-    world: world_nether
-    x: 108.40885537905103
-    y: 95.81925455218403
-    z: -11.735175695359635
-    pitch: 27.12968
-    yaw: -219.55183
-  size: 20
+    world: world
+    x: 0.0
+    y: 100.0
+    z: 0.0
+    pitch: 0.0
+    yaw: 0.0
+  size: 100
