@@ -4,10 +4,7 @@ import de.superhellth.kitpvp.kits.Kit;
 import de.superhellth.kitpvp.main.Kitpvp;
 import de.superhellth.kitpvp.ui.Chat;
 import de.superhellth.kitpvp.util.LocationChecker;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.WorldBorder;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -25,6 +22,7 @@ public class Game {
     private List<Player> members;
     private List<Player> invited;
     private Map<Player, Kit> selectedKits;
+    private Map<Player, Boolean> alive;
     private List<Player> readyPlayers;
     private List<Block> placedBlocks;
 
@@ -33,6 +31,7 @@ public class Game {
         members = new ArrayList<>();
         invited = new ArrayList<>();
         selectedKits = new HashMap<>();
+        alive = new HashMap<>();
         readyPlayers = new ArrayList<>();
         placedBlocks = Collections.synchronizedList(new ArrayList<>());
         members.add(host);
@@ -46,6 +45,7 @@ public class Game {
             for (PotionEffect potionEffect : player.getActivePotionEffects()) {
                 player.removePotionEffect(potionEffect.getType());
             }
+            alive.put(player, true);
             player.setHealth(20);
             player.setSaturation(20);
             player.setFoodLevel(20);
@@ -132,6 +132,11 @@ public class Game {
         return selectedKits;
     }
 
+    // get alive map
+    public Map<Player, Boolean> getAlive() {
+        return alive;
+    }
+
     // manage bw kit
     public List<Block> getPlacedBlocks() {
         return placedBlocks;
@@ -187,6 +192,7 @@ public class Game {
 
         // reset potion effects
         for (Player player : members) {
+            player.setGameMode(GameMode.SURVIVAL);
             for (PotionEffect potionEffect : player.getActivePotionEffects()) {
                 player.removePotionEffect(potionEffect.getType());
             }
@@ -223,6 +229,13 @@ public class Game {
 
         if (allReady) {
             start();
+        }
+    }
+
+    // ends the game
+    public void end() {
+        for (Player player : members) {
+
         }
     }
 }
