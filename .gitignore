@@ -1,6 +1,6 @@
 # server
 server/
-!server/plugins/
+!server/plugins/*
 
 # show config
 !config.yml
