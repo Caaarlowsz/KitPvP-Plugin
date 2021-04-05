@@ -1,6 +1,7 @@
 # server
 server/*
 !server/plugins
+server/plugins/PluginMetrics
 
 # show config
 !config.yml
