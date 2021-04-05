@@ -35,15 +35,7 @@ public class PlayerDeathListener implements Listener {
 
         // check if second to last player died
         if (getAlive(game) == 1) {
-            game.broadcast("The game is over! The winner is "
-                    + game.getMembers().get(0).getDisplayName() + "! Congratulations!");
-
-            // teleport everyone to the  center
-            game.getMembers().get(0).setGameMode(GameMode.SPECTATOR);
-            Location center = plugin.getMapCenter();
-            for (Player player1 : game.getMembers()) {
-                player1.teleport(center);
-            }
+            game.end();
         }
     }
 

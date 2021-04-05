@@ -1,6 +1,7 @@
 package de.superhellth.kitpvp.kits;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 
 public class Trapper extends Kit {
 
@@ -26,16 +27,21 @@ public class Trapper extends Kit {
 
     @Override
     public void setItems() {
-
+        quickAdd(Material.STICKY_PISTON, 8);
+        quickAdd(Material.PISTON, 8);
+        quickAdd(Material.REDSTONE, 32);
+        quickAdd(Material.REPEATER, 8);
+        quickAdd(Material.TRAPPED_CHEST, 3);
+        quickAdd(Material.COMPARATOR, 3);
+        quickAdd(Material.TNT, 6);
+        quickAdd(Material.GRAVEL, 6);
     }
 
     @Override
     public void setArmor() {
-
     }
 
     @Override
     public void setEffects() {
-
     }
 }

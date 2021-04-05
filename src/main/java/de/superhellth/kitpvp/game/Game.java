@@ -99,6 +99,10 @@ public class Game {
         if (readyPlayers.contains(player)) {
             readyPlayers.remove(player);
         }
+        if (selectedKits.keySet().contains(player)) {
+            selectedKits.remove(player);
+        }
+        alive.remove(player);
     }
 
     // select kit
@@ -162,7 +166,6 @@ public class Game {
     // give players items and effects
     private void deployKits() {
         for (Player player : members) {
-            Chat.sendMessage(player, "Your items...");
             Kit selectedKit = selectedKits.get(player);
             for (ItemStack item : selectedKit.getItems()) {
                 player.getInventory().addItem(item);
@@ -204,15 +207,18 @@ public class Game {
         }
 
         // set world border
-        WorldBorder border = plugin.getMapCenter().getWorld().getWorldBorder();
-        border.setCenter(plugin.getMapCenter());
-        border.setSize(plugin.getMapSize());
+        for (World world : plugin.getServer().getWorlds()) {
+            WorldBorder border = world.getWorldBorder();
+            border.setCenter(plugin.getMapCenter());
+            border.setSize(plugin.getMapSize());
+        }
+
+        WorldBorder mainBorder = plugin.getMapCenter().getWorld().getWorldBorder();
 
         // teleport players
-        Random random = new Random();
         LocationChecker checker = new LocationChecker();
         for (Player player : members) {
-            player.teleport(checker.findSafeSpot(border.getCenter(), (int) border.getSize()));
+            player.teleport(checker.findSafeSpot(mainBorder.getCenter(), (int) mainBorder.getSize()));
         }
     }
 
@@ -234,8 +240,31 @@ public class Game {
 
     // ends the game
     public void end() {
-        for (Player player : members) {
+        broadcast("The game is over! The winner is "
+                + getWinner().getDisplayName() + "! Congratulations!");
 
+        // teleport everyone to the  center
+        getWinner().setGameMode(GameMode.SPECTATOR);
+        Location center = Kitpvp.getInstance().getMapCenter();
+        for (Player player : members) {
+            player.teleport(center);
         }
+
+        // reset borders
+        for (World world : Kitpvp.getInstance().getServer().getWorlds()) {
+            WorldBorder border = world.getWorldBorder();
+            border.setCenter(0, 0);
+            border.setSize(6000000);
+        }
+    }
+
+    private Player getWinner() {
+        for (Player player : members) {
+            if (alive.get(player)) {
+                return player;
+            }
+        }
+
+        return null;
     }
 }

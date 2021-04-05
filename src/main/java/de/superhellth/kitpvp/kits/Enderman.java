@@ -9,6 +9,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 // Special ability: Doesn't take ender pearl damage
 public class Enderman extends Kit {
 
+    public static final int REACH = 16;
+
     // singleton pattern
     private static Enderman instance;
     public static Enderman getInstance() {

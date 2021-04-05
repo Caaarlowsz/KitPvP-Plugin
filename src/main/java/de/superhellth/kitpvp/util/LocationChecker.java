@@ -58,14 +58,12 @@ public class LocationChecker {
             }
         }
         // comment
-        System.out.println(currentGuess.toString());
         currentGuess.setY(currentGuess.getBlockY() + 1);
 
         return currentGuess;
     }
 
     private boolean isSafe(Location location) {
-        Kitpvp.getInstance().log("Checking: " + location.toString());
         // check if block is acceptable
         if (accepted.contains(location.getBlock().getType())) {
 
@@ -73,7 +71,6 @@ public class LocationChecker {
             Location aLoc;
             for (int i = 1; i < 3; i++) {
                 aLoc = new Location(location.getWorld(), location.getBlockX(), location.getBlockY() + i, location.getBlockZ());
-                Kitpvp.getInstance().log("Checking for air: " + aLoc.toString());
                 if (!aLoc.getBlock().isPassable()) {
                     return false;
                 }
@@ -85,7 +82,6 @@ public class LocationChecker {
                     for (int x = -1; x < 2; x++) {
                         Location bLoc = new Location(location.getWorld(), location.getBlockX() + x,
                                 location.getBlockY() + y, location.getBlockZ() + z);
-                        Kitpvp.getInstance().log("Checking for lava: " + bLoc.toString());
                         if (bLoc.getBlock().getType() == Material.LAVA) {
                             return false;
                         }
@@ -95,7 +91,6 @@ public class LocationChecker {
 
             // check if has skylight access
             if (location.getWorld().getEnvironment() == World.Environment.NORMAL) {
-                Kitpvp.getInstance().log("Checking for sky: " + location.toString());
                 return hasSkylight(location);
             }
             return true;

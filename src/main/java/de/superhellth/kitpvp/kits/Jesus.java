@@ -54,9 +54,7 @@ public class Jesus extends Kit {
     public void setEffects() {
         PotionEffect grace = new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 99999 * 20, 0);
         effects.add(grace);
-        PotionEffect glowing = new PotionEffect(PotionEffectType.GLOWING, 60 * 20, 0);
+        PotionEffect glowing = new PotionEffect(PotionEffectType.GLOWING, 90 * 20, 0);
         effects.add(glowing);
-        PotionEffect slowFalling = new PotionEffect(PotionEffectType.SLOW_FALLING, 60 * 20, 0);
-        effects.add(slowFalling);
     }
 }

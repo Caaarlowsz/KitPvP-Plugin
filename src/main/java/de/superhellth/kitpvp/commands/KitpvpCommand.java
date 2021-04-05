@@ -211,6 +211,7 @@ public class KitpvpCommand implements CommandExecutor {
         for (Player player : invitedTo.getMembers()) {
             Chat.sendMessage(player, invited.getDisplayName() + " has joined the game!\n Say Hi!");
         }
+        invitedTo.getInvited().remove(invited);
     }
 
     // start game

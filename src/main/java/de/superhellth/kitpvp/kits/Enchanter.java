@@ -28,8 +28,9 @@ public class Enchanter extends Kit {
     @Override
     public void setItems() {
         quickAdd(Material.ENCHANTING_TABLE, 1);
-        quickAdd(Material.EXPERIENCE_BOTTLE, 32);
+        quickAdd(Material.EXPERIENCE_BOTTLE, 64);
         quickAdd(Material.LAPIS_LAZULI, 64);
+        quickAdd(Material.BOOKSHELF, 15);
     }
 
     @Override
