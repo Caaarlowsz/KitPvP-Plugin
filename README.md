@@ -29,7 +29,7 @@ A mc-spigot plugin for kit pvp
 > Provides a list of all available kits  
 
 /kp select _kit_  
-> Select your preferred kit  
+> Select your preferred kit. If none is selected a random one will be chosen for you  
 
 /kp ready  
 > Marks you as ready, the game starts when everyone is marked as ready  
