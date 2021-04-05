@@ -1,5 +1,5 @@
 # server
-server/*
+server/
 !server/plugins
 
 # show config
