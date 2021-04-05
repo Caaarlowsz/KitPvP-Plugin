@@ -1,5 +1,6 @@
 # server
 /server/*
+*.java
 
 # User-specific stuff
 .idea/
