@@ -1,3 +1,5 @@
+# server
+server/logs/*
 
 # show config
 !config.yml
