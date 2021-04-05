@@ -1,0 +1,13 @@
+name: Kitpvp
+version: ${project.version}
+main: de.superhellth.kitpvp.main.Kitpvp
+api-version: 1.16
+authors: [ superhellth ]
+description: A Kit Pvp plugin for vanilla survival servers
+
+commands:
+  kitpvp:
+    usage: /kitpvp
+    description: manage kitpvp games
+    aliases:
+      - kp
