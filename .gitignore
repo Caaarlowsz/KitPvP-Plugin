@@ -1,6 +1,6 @@
 # server
-!server/plugins/KitpvpPlugin.jar
 server/
+!server/plugins/KitpvpPlugin.jar
 
 # show config
 !config.yml
