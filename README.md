@@ -35,7 +35,7 @@ A mc-spigot plugin for kit pvp
 * **Trapper**
   * Can trap his opponents with a variety of redstone materials  
 
-### Coming soon
+### Coming soon:
 * **Souper**
   * A traditional soup kit
 * **Pyro**
