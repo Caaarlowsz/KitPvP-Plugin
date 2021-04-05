@@ -20,9 +20,9 @@ import java.util.Map;
 
 public final class Kitpvp extends JavaPlugin {
 
-    public static final String WORLD_SETUP = "world-setup";
-    public static final String CENTER = "center";
-    public static final String SIZE = "size";
+    public static final String MAP_SETUP = "world-setup";
+    public static final String MAP_CENTER = MAP_SETUP + "." + "center";
+    public static final String MAP_SIZE = MAP_SETUP + "." + "size";
     private int mapSize;
     private Location mapCenter;
 
@@ -75,8 +75,8 @@ public final class Kitpvp extends JavaPlugin {
 
     public void loadConfig() {
         // set map center
-        mapCenter = Location.deserialize(getConfig().getConfigurationSection(WORLD_SETUP + "." + CENTER).getValues(false));
-        mapSize = getConfig().getInt(WORLD_SETUP + "." + SIZE);
+        mapCenter = Location.deserialize(getConfig().getConfigurationSection(MAP_SETUP + "." + MAP_CENTER).getValues(false));
+        mapSize = getConfig().getInt(MAP_SETUP + "." + MAP_SIZE);
     }
 
     // log a message
