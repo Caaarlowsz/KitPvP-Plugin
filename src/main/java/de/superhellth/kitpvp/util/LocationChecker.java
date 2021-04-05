@@ -57,7 +57,6 @@ public class LocationChecker {
                 break;
             }
         }
-        // comment
         System.out.println(currentGuess.toString());
         currentGuess.setY(currentGuess.getBlockY() + 1);
 
