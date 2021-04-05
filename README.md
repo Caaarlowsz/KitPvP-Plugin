@@ -19,7 +19,7 @@ A mc-spigot plugin for kit pvp
 /kp newgame 
 > Starts a new game  
 
-/kp invite <player>  
+/kp invite _player_  
 > Invite a player to your current game  
 
 /kp start  
@@ -28,7 +28,7 @@ A mc-spigot plugin for kit pvp
 /kp kits  
 > Provides a list of all available kits  
 
-/kp select <kit>  
+/kp select _kit_  
 > Select your preferred kit  
 
 /kp ready  
@@ -43,5 +43,5 @@ A mc-spigot plugin for kit pvp
 /kp config mapcenter  
 > Sets the center for the border(generated when game starts) to the current location of the player executing the command  
 
-/kp config mapsize <int>  
+/kp config mapsize _size_  
 > Sets the mapsize(length of one side) to the value of <int>
