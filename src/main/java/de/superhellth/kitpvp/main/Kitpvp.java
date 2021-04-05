@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +72,11 @@ public final class Kitpvp extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        try {
+            getConfig().save(getConfig().getCurrentPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadConfig() {
