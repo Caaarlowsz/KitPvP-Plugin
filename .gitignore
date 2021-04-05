@@ -1,6 +1,12 @@
 # server
 server/
 
+# show config
+!config.yml
+
+# pom.xml
+pom.xml
+
 # User-specific stuff
 .idea/
 
