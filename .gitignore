@@ -25,6 +25,7 @@ out/
 
 # Package Files #
 *.jar
+!server/plugins/KitpvpPlugin.jar
 *.war
 *.nar
 *.ear
