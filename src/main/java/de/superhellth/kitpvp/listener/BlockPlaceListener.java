@@ -19,7 +19,7 @@ public class BlockPlaceListener implements Listener {
             return;
         }
         Game game = Kitpvp.getInstance().getGame(player);
-        if (game.getCurrentPhase() == Phase.fighting) {
+        if (game.getCurrentPhase() == Phase.FIGHTING) {
             game.addPlacedBlock(block);
         }
     }

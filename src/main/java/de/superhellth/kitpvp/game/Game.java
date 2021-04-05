@@ -36,7 +36,7 @@ public class Game {
         readyPlayers = new ArrayList<>();
         placedBlocks = Collections.synchronizedList(new ArrayList<>());
         members.add(host);
-        currentPhase = Phase.invitation;
+        currentPhase = Phase.INVITATION;
     }
 
     // start kit selection phase
@@ -54,7 +54,7 @@ public class Game {
                     new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 70 * 60 * 20, 255));
         }
 
-        currentPhase = Phase.kitselection;
+        currentPhase = Phase.KIT_SELECTION;
         broadcast(ChatColor.BOLD + "Kit selection phase has begun!\n§r" + Chat.BASE_COLOR +
                 "You can now select your kit with /kitpvp select <kit>\n" +
                 "Type /kitpvp kits to see which kits are available!\n" +
@@ -77,11 +77,11 @@ public class Game {
                     + ChatColor.BOLD + selectedKits.get(player).getName() + "§r" + Chat.BASE_COLOR + "!");
         }
 
-        currentPhase = Phase.grace;
+        currentPhase = Phase.GRACE;
         // setup world border
         setupWorldAndPlayerPosition();
         deployKits();
-        currentPhase = Phase.fighting;
+        currentPhase = Phase.FIGHTING;
         broadcast(ChatColor.BOLD + "You are now in the fighting phase, the last to survive wins!");
     }
 

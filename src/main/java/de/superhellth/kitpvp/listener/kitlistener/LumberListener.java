@@ -1,7 +1,5 @@
 package de.superhellth.kitpvp.listener.kitlistener;
 
-import de.superhellth.kitpvp.game.Game;
-import de.superhellth.kitpvp.game.Phase;
 import de.superhellth.kitpvp.kits.Lumber;
 import de.superhellth.kitpvp.main.Kitpvp;
 import org.bukkit.Location;
@@ -10,7 +8,6 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.ArrayList;
@@ -35,7 +32,7 @@ public class LumberListener extends KitListener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         Location blockLoc = block.getLocation();
-        if (checkCondition(player, Lumber.getInstance())) {
+        if (isPlayerFighting(player, Lumber.getInstance())) {
             if (player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.DURABILITY) == 10) {
                 if (logs.contains(block.getType())) {
                     chopTree(blockLoc);

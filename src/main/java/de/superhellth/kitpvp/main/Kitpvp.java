@@ -12,6 +12,7 @@ import de.superhellth.kitpvp.ui.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public final class Kitpvp extends JavaPlugin {
 
     // singleton pattern
     private static Kitpvp instance;
+
     public static Kitpvp getInstance() {
         if (Kitpvp.instance == null) {
             instance = new Kitpvp();
@@ -62,16 +64,17 @@ public final class Kitpvp extends JavaPlugin {
         new KitpvpCommand(this);
 
         // Register listener
-        getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
-        getServer().getPluginManager().registerEvents(new ReadyListener(this), this);
-        getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
+        registerListeners(new PlayerDeathListener(this),
+                new ReadyListener(this),
+                new BlockPlaceListener());
 
         // Kit Listener
-        getServer().getPluginManager().registerEvents(new EndermanListener(this), this);
-        getServer().getPluginManager().registerEvents(new LumberListener(this), this);
-        getServer().getPluginManager().registerEvents(new BWListener(this), this);
-        getServer().getPluginManager().registerEvents(new ZeusListener(this), this);
-        getServer().getPluginManager().registerEvents(new WitchListener(this), this);
+        registerListeners(new BWListener(this),
+                new EndermanListener(this),
+                new LumberListener(this),
+                new ZeusListener(this),
+                new WitchListener(this),
+                new SoupListener(this));
     }
 
     @Override
@@ -81,7 +84,6 @@ public final class Kitpvp extends JavaPlugin {
     }
 
     public void loadConfig() {
-        // set map center
         try {
             mapCenter = Location.deserialize(getConfig().getConfigurationSection(MAP_CENTER).getValues(false));
             mapSize = getConfig().getInt(MAP_SIZE);
@@ -164,9 +166,16 @@ public final class Kitpvp extends JavaPlugin {
         kits.add(BW.getInstance());
         kits.add(Jesus.getInstance());
         kits.add(Zeus.getInstance());
+        kits.add(Soup.getInstance());
 
         for (Kit kit : kits) {
             kitMap.put(kit.getName(), kit);
+        }
+    }
+
+    private void registerListeners(Listener... listeners) {
+        for (Listener listener: listeners) {
+            getServer().getPluginManager().registerEvents(listener, this);
         }
     }
 }

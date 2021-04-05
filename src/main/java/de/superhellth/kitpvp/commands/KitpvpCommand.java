@@ -9,7 +9,6 @@ import de.superhellth.kitpvp.ui.Chat;
 import de.superhellth.kitpvp.util.ConfigWriter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -179,7 +178,7 @@ public class KitpvpCommand implements CommandExecutor {
             Chat.sendMessage(player, "You are not the host of this game. Only the host can invite new players.");
             return;
         }
-        if (plugin.getGame(player).getCurrentPhase() != Phase.invitation) {
+        if (plugin.getGame(player).getCurrentPhase() != Phase.INVITATION) {
             Chat.sendMessage(player, "You can only invite players during invitation phase!");
             return;
         }
@@ -202,7 +201,7 @@ public class KitpvpCommand implements CommandExecutor {
             Chat.sendMessage(invited, "You haven't received an invitation from this player.");
             return;
         }
-        if (invitedTo.getCurrentPhase() != Phase.invitation) {
+        if (invitedTo.getCurrentPhase() != Phase.INVITATION) {
             Chat.sendMessage(invited, "The game is already running, you cant join now!");
             return;
         }
@@ -225,7 +224,7 @@ public class KitpvpCommand implements CommandExecutor {
             Chat.sendMessage(player, "You are not the host of this game!");
             return;
         }
-        if (game.getCurrentPhase() != Phase.invitation) {
+        if (game.getCurrentPhase() != Phase.INVITATION) {
             Chat.sendMessage(player, "You aren't in the invitation phase anymore!");
             return;
         }
@@ -249,7 +248,7 @@ public class KitpvpCommand implements CommandExecutor {
             Chat.sendMessage(player, "You are currently not in a game!");
             return;
         }
-        if (game.getCurrentPhase() != Phase.kitselection) {
+        if (game.getCurrentPhase() != Phase.KIT_SELECTION) {
             Chat.sendMessage(player, ChatColor.BOLD + "You are not in the kit selection phase!");
             return;
         }
@@ -265,7 +264,7 @@ public class KitpvpCommand implements CommandExecutor {
 
     // ready
     private void ready(Player player) {
-        if (plugin.getGame(player) == null || plugin.getGame(player).getCurrentPhase() != Phase.kitselection) {
+        if (plugin.getGame(player) == null || plugin.getGame(player).getCurrentPhase() != Phase.KIT_SELECTION) {
             Chat.sendMessage(player, "You can't /kitpvp ready right now!");
             return;
         }

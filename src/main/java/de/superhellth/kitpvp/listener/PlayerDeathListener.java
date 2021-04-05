@@ -23,7 +23,7 @@ public class PlayerDeathListener implements Listener {
         Player player = event.getEntity();
         Game game = plugin.getGame(player);
 
-        if ((game == null) || (game.getCurrentPhase() != Phase.fighting) || !(game.getAlive().get(player))) {
+        if ((game == null) || (game.getCurrentPhase() != Phase.FIGHTING) || !(game.getAlive().get(player))) {
             return;
         }
         game.broadcast(player.getDisplayName() + " died and is now out!");

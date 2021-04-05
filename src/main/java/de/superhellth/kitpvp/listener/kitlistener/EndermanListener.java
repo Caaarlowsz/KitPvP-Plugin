@@ -1,16 +1,12 @@
 package de.superhellth.kitpvp.listener.kitlistener;
 
-import de.superhellth.kitpvp.game.Game;
-import de.superhellth.kitpvp.game.Phase;
 import de.superhellth.kitpvp.kits.Enderman;
 import de.superhellth.kitpvp.main.Kitpvp;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.potion.PotionEffect;
@@ -29,9 +25,10 @@ public class EndermanListener extends KitListener {
     @EventHandler
     public void onPlayerTeleportEvent(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
-        if (checkCondition(player, Enderman.getInstance())) {
+        if (isPlayerFighting(player, Enderman.getInstance())) {
             if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 10, 10, false));
+                player.addPotionEffect(new PotionEffect(
+                        PotionEffectType.DAMAGE_RESISTANCE, 10, 10, false, false));
             }
         }
     }
@@ -40,7 +37,7 @@ public class EndermanListener extends KitListener {
     public void onPlayerSneakEvent(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
 
-        if (checkCondition(player, Enderman.getInstance())) {
+        if (isPlayerFighting(player, Enderman.getInstance())) {
             if (event.isSneaking()) {
                 Player target = getTarget(player);
                 if (target == null) {
