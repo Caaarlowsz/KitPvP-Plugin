@@ -5,6 +5,7 @@ import de.superhellth.kitpvp.main.Kitpvp;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -39,7 +40,7 @@ public class EndermanListener extends KitListener {
 
         if (isPlayerFighting(player, Enderman.getInstance())) {
             if (event.isSneaking()) {
-                Player target = getTarget(player);
+                LivingEntity target = getTarget(player);
                 if (target == null) {
                     return;
                 }
@@ -51,13 +52,13 @@ public class EndermanListener extends KitListener {
         }
     }
 
-    private Player getTarget(Player player) {
+    private LivingEntity getTarget(Player player) {
         List<Entity> nearbyE = player.getNearbyEntities(Enderman.REACH, Enderman.REACH, Enderman.REACH);
-        List<Player> players = new ArrayList<>();
+        List<LivingEntity> players = new ArrayList<>();
 
         for (Entity e : nearbyE) {
-            if (e instanceof Player) {
-                players.add((Player) e);
+            if (e instanceof LivingEntity) {
+                players.add((LivingEntity) e);
             }
         }
 
@@ -73,7 +74,7 @@ public class EndermanListener extends KitListener {
             by = block.getY();
             bz = block.getZ();
             // check for entities near this block in the line of sight
-            for (Player p : players) {
+            for (LivingEntity p : players) {
                 loc = p.getLocation();
                 ex = loc.getX();
                 ey = loc.getY();
