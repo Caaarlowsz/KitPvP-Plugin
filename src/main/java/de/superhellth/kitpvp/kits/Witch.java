@@ -34,7 +34,7 @@ public class Witch extends Kit {
 
     @Override
     public void setLore() {
-        lore = Arrays.asList("");
+        lore = Arrays.asList("Is immune to bad potion effects");
     }
 
     @Override

@@ -34,7 +34,7 @@ public class Enchanter extends Kit {
 
     @Override
     public void setLore() {
-        lore = Arrays.asList("A wizard who can enchant his gear high level.");
+        lore = Arrays.asList("");
     }
 
     @Override

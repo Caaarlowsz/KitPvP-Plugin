@@ -40,7 +40,7 @@ public class Jesus extends Kit {
 
     @Override
     public void setLore() {
-        lore = Arrays.asList("");
+        lore = Arrays.asList("Can walk on water");
     }
 
     @Override

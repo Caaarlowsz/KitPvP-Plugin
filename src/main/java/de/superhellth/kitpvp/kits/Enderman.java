@@ -40,7 +40,7 @@ public class Enderman extends Kit {
 
     @Override
     public void setLore() {
-        lore = Arrays.asList("");
+        lore = Arrays.asList("Sneak to change position with a mob or player");
     }
 
     @Override

@@ -2,7 +2,7 @@ package de.superhellth.kitpvp.game;
 
 import de.superhellth.kitpvp.kits.Kit;
 import de.superhellth.kitpvp.main.Kitpvp;
-import de.superhellth.kitpvp.ui.Chat;
+import de.superhellth.kitpvp.util.Chat;
 import de.superhellth.kitpvp.util.LocationChecker;
 import de.superhellth.kitpvp.util.TimeManager;
 import org.bukkit.*;
@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 

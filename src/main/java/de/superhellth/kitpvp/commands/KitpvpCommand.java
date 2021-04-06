@@ -4,9 +4,8 @@ import de.superhellth.kitpvp.game.Game;
 import de.superhellth.kitpvp.game.Phase;
 import de.superhellth.kitpvp.kits.Kit;
 import de.superhellth.kitpvp.main.Kitpvp;
-import de.superhellth.kitpvp.ui.Chat;
+import de.superhellth.kitpvp.util.Chat;
 import de.superhellth.kitpvp.util.ConfigWriter;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,7 +14,12 @@ import org.bukkit.entity.Player;
 
 public class KitpvpCommand implements CommandExecutor {
 
+    // The plugin instance
     private final Kitpvp plugin;
+
+    // The given arguments
+    private String[] args;
+    private Player player;
 
     // constructor
     public KitpvpCommand(Kitpvp plugin) {
@@ -26,112 +30,107 @@ public class KitpvpCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // player who ran command
-        Player player = (Player) sender;
+        this.player = (Player) sender;
+        this.args = args;
 
-        if (args[0] == null) {
-            args[0] = "error";
-        }
+        // check if command has at least one argument
+        hasCorrectArgs(1, Allow.OR_MORE);
 
         // check argument
         switch (args[0].toLowerCase()) {
-            case "help":
-                Chat.sendMessage(player, "Commands: \n" +
-                        "/Kitpvp newgame \n" +
-                        "/Kitpvp invite <player> \n" +
-                        "/Kitpvp leave \n" +
-                        "/Kitpvp stop \n" +
-                        "/Kitpvp start");
+            case Commands.HELP:
+                if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
+                    Chat.sendMessage(player, Chat.HELP);
+                }
                 break;
 
-            case "newgame":
-                addGame(player);
+            case Commands.NEW_GAME:
+                if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
+                    newGame(player);
+                }
                 break;
 
-            case "invite":
-                try {
+            case Commands.INVITE:
+                if (hasCorrectArgs(2, Allow.ONLY_EQUAL)) {
                     invite(player, args[1]);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    Chat.sendMessage(player, "Try /kitpvp invite <player>");
                 }
                 break;
 
-            case "accept":
-                try {
+            case Commands.ACCEPT:
+                if (hasCorrectArgs(2, Allow.ONLY_EQUAL)) {
                     acceptInvite(player, args[1]);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    Chat.sendMessage(player, "Try /kitpvp accept <player>");
                 }
                 break;
 
-            case "list":
-                list(player);
+            case Commands.LIST:
+                if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
+                    list(player);
+                }
                 break;
 
-            case "start":
-                start(player);
+            case Commands.START:
+                if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
+                    start(player);
+                }
                 break;
 
-            case "kits":
-                listKits(player);
+            case Commands.LEAVE:
+                if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
+                    leaveGame(player);
+                }
                 break;
 
-            case "leave":
-                leaveGame(player);
+            case Commands.STOP:
+                if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
+                    stopGame(player);
+                }
                 break;
 
-            case "stop":
-                stopGame(player);
-                break;
-
-            case "config":
-                config(player, args);
+            case Commands.CONFIG:
+                if (hasCorrectArgs(1, Allow.OR_MORE)) {
+                    config();
+                }
                 break;
 
             default:
-                Chat.sendMessage(player, "Unknown command!");
+                Chat.sendMessage(player, Chat.UNKNOWN);
                 break;
-
         }
 
         return true;
     }
 
     // manage config commands
-    private void config(Player player, String[] args) {
-        try {
-            args[1] = args[1];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            Chat.sendMessage(player, ChatColor.BOLD + "Possible arguments:§r\n"
-                        + Chat.BASE_COLOR + " mapsize\n mapcenter");
-            return;
-        }
+    private void config() {
+        if (hasCorrectArgs(2, Allow.OR_MORE)) {
+            switch (args[1].toLowerCase()) {
+                case Commands.MAP_SIZE:
+                    try {
+                        ConfigWriter.updateSize(Integer.parseInt(args[2]));
+                    } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                        Chat.sendMessage(player, "Type a number!");
+                        return;
+                    }
+                    Chat.sendMessage(player, "Successfully changed map size!");
+                    break;
 
-        switch (args[1].toLowerCase()) {
-            case "mapsize":
-                try {
-                    ConfigWriter.updateSize(Integer.parseInt(args[2]));
-                } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                    Chat.sendMessage(player, "Type a number!");
-                    return;
-                }
-                Chat.sendMessage(player, "Successfully changed map size!");
-                break;
+                case Commands.MAP_CENTER:
+                    if (hasCorrectArgs(2, Allow.ONLY_EQUAL)) {
+                        ConfigWriter.updateCenter(player.getLocation());
+                        Chat.sendMessage(player, Chat.CHANGED_MAP_CENTER);
+                    }
+                    break;
 
-            case "mapcenter":
-                ConfigWriter.updateCenter(player.getLocation());
-                Chat.sendMessage(player, "Successfully changed map center!");
-                break;
-
-            default:
-                Chat.sendMessage(player, "Unknown command");
-                break;
+                default:
+                    Chat.sendMessage(player, "Unknown command");
+                    break;
+            }
         }
     }
 
     // creates a new game
     // player is the host of this game
-    private void addGame(Player player) {
+    private void newGame(Player player) {
         if (!plugin.isInGame(player)) {
             Kitpvp.getInstance().reloadConfig();
             Kitpvp.getInstance().loadConfig();
@@ -275,5 +274,38 @@ public class KitpvpCommand implements CommandExecutor {
         game.end(false);
         plugin.getGames().remove(game);
         Chat.sendMessage(player, "The game has been stopped!");
+    }
+
+    /**
+     * Check whether or not the number of arguments is correct
+     * @param numArgs Number of arguments the command is supposed to have
+     * @param option Determines whether the number of arguments in the command can be greater or smaller
+     * @return
+     */
+    private boolean hasCorrectArgs(int numArgs, Allow option) {
+        int givenArgs = args.length;
+        switch (option) {
+            case OR_LESS:
+                if (givenArgs == numArgs || givenArgs < numArgs) {
+                    return true;
+                }
+                Chat.sendMessage(player, Chat.TOO_MANY_ARGS);
+                break;
+
+            case ONLY_EQUAL:
+                if (givenArgs == numArgs) {
+                    return true;
+                }
+                Chat.sendMessage(player, Chat.NOT_RIGHT_ARGS);
+                break;
+
+            case OR_MORE:
+                if (givenArgs == numArgs || givenArgs > numArgs) {
+                    return true;
+                }
+                Chat.sendMessage(player, Chat.TOO_FEW_ARGS);
+                break;
+        }
+        return false;
     }
 }

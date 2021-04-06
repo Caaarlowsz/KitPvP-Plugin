@@ -38,7 +38,7 @@ public class Lumber extends Kit {
 
     @Override
     public void setLore() {
-        lore = Arrays.asList("");
+        lore = Arrays.asList("Can mine entire trees with his axe");
     }
 
     @Override

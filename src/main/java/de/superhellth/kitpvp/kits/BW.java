@@ -42,7 +42,7 @@ public class BW extends Kit {
 
     @Override
     public void setLore() {
-        lore = Arrays.asList("Is a stacked bedwars player.", "Therefore can't mine naturally generated Blocks");
+        lore = Arrays.asList("Can't mine naturally generated Blocks");
     }
 
     @Override
@@ -61,7 +61,6 @@ public class BW extends Kit {
         // Bow
         ItemStack bow = new ItemStack(Material.BOW, 1);
         bow.getItemMeta().setDisplayName(color + "Bow III");
-        bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
         bow.addEnchantment(Enchantment.ARROW_KNOCKBACK, 2);
         bow.addEnchantment(Enchantment.DURABILITY, 3);
         items.add(bow);
@@ -92,7 +91,7 @@ public class BW extends Kit {
         quickAdd(Material.SANDSTONE, 64);
         quickAdd(Material.SANDSTONE, 64);
         quickAdd(Material.SANDSTONE, 64);
-        quickAdd(Material.ARROW, 1);
+        quickAdd(Material.ARROW, 64);
     }
 
     @Override

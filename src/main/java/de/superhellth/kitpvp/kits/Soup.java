@@ -37,7 +37,7 @@ public class Soup extends Kit {
 
     @Override
     public void setLore() {
-        lore = Arrays.asList("");
+        lore = Arrays.asList("Consuming a soup grants " + soupHeal + " HP");
     }
 
     @Override

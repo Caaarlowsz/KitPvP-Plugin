@@ -38,7 +38,7 @@ public class Zeus extends Kit {
 
     @Override
     public void setLore() {
-        lore = Arrays.asList("");
+        lore = Arrays.asList("Can summon 4 lightning strikes");
     }
 
     @Override

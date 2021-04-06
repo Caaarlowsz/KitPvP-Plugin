@@ -49,7 +49,7 @@ public class KitInventory {
             desc.addAll(kit.getLore());
         }
         if (kit.getItems().size() > 0) {
-            if (desc.size() == 0) {
+            if (desc.size() != 0) {
                 desc.add("");
             }
             desc.add("Items:");

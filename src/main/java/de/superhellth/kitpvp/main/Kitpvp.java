@@ -9,7 +9,7 @@ import de.superhellth.kitpvp.listener.GraceListener;
 import de.superhellth.kitpvp.listener.KitSelectionListener;
 import de.superhellth.kitpvp.listener.PlayerDeathListener;
 import de.superhellth.kitpvp.listener.kitlistener.*;
-import de.superhellth.kitpvp.ui.Chat;
+import de.superhellth.kitpvp.util.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -177,6 +177,7 @@ public final class Kitpvp extends JavaPlugin {
         kits.add(Zeus.getInstance());
         kits.add(Soup.getInstance());
         kits.add(Trapper.getInstance());
+        kits.add(Pyro.getInstance());
 
         for (Kit kit : kits) {
             kitMap.put(kit.getView(), kit);
