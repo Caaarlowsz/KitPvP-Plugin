@@ -9,11 +9,6 @@ public class Chat {
     public final static ChatColor BASE_COLOR = ChatColor.DARK_GRAY;
     public final static String PREFIX = ChatColor.BLUE + "" +  ChatColor.BOLD + "KitPvP§r " + BASE_COLOR + "";
 
-    // Error messages
-
-    // Command outputs
-
-
     /**
      * Sends a color message with prefix to the player
      * @param player Player to send message to

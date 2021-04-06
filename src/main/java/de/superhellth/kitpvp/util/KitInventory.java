@@ -42,6 +42,10 @@ public class KitInventory {
         }
     }
 
+    public Inventory getInv() {
+        return inventory;
+    }
+
     private List<String> getFullDesc(Kit kit) {
         List<String> desc = new ArrayList<>();
         if (!kit.getLore().get(0).equals("")) {
@@ -97,10 +101,6 @@ public class KitInventory {
         typeName = typeName.replaceAll("_", " ");
         typeName = typeName.toLowerCase();
         return typeName;
-    }
-
-    public Inventory getInv() {
-        return inventory;
     }
 
 }

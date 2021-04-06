@@ -1,4 +1,4 @@
-package de.superhellth.kitpvp.chat;
+package de.superhellth.kitpvp.chat.stringSaves;
 
 public class CommandOutput {
 

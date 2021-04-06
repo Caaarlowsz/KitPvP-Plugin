@@ -1,7 +1,7 @@
 package de.superhellth.kitpvp.main;
 
-import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
+import de.superhellth.kitpvp.chat.Chat;
 import de.superhellth.kitpvp.commands.KitpvpCommand;
 import de.superhellth.kitpvp.game.Game;
 import de.superhellth.kitpvp.kits.*;
@@ -10,7 +10,6 @@ import de.superhellth.kitpvp.listener.GraceListener;
 import de.superhellth.kitpvp.listener.KitSelectionListener;
 import de.superhellth.kitpvp.listener.PlayerDeathListener;
 import de.superhellth.kitpvp.listener.kitlistener.*;
-import de.superhellth.kitpvp.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,7 +24,7 @@ import java.util.Map;
 
 public final class Kitpvp extends JavaPlugin {
 
-    private final Location initCenter = new Location(getServer().getWorlds().get(0), 0, 100, 0);
+    private Location initCenter;
     private final int initSize = 300;
 
     public static final String MAP_SETUP = "world-setup";
@@ -52,6 +51,7 @@ public final class Kitpvp extends JavaPlugin {
         // log start message
         log("Plugin started");
         instance = this;
+        initCenter = new Location(getServer().getWorlds().get(0), 0, 100, 0);
 
         // load config
         loadConfig();
@@ -91,7 +91,7 @@ public final class Kitpvp extends JavaPlugin {
     }
 
     /**
-     * Load all values stored in the config file to the according variable
+     * Load all values stored in the config file to the according variable.
      */
     public void loadConfig() {
         try {
@@ -106,7 +106,7 @@ public final class Kitpvp extends JavaPlugin {
     }
 
     /**
-     * Log a message to the console. Has a plugin-specific prefix
+     * Log a message to the console. Has a plugin-specific prefix.
      *
      * @param text
      */
@@ -115,18 +115,15 @@ public final class Kitpvp extends JavaPlugin {
     }
 
     // getter
-    // returns list of all games
+    // returns list of all running games
     public List<Game> getGames() {
         return games;
     }
 
-    // returns list of all kits
     public List<Kit> getKits() {
         return new ArrayList<>(kitMap.values());
     }
 
-    // get kit
-    // doesnt matter if letter are written capital or not
     public Kit getKit(Material view) {
         return kitMap.getOrDefault(view, null);
     }
@@ -151,7 +148,6 @@ public final class Kitpvp extends JavaPlugin {
         return mapCenter;
     }
 
-    // checks if player is in a game
     public boolean isInGame(Player player) {
         for (Game game : games) {
             if (game.playedBy(player)) {
