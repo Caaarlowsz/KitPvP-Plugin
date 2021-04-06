@@ -2,7 +2,7 @@ package de.superhellth.kitpvp.game;
 
 import de.superhellth.kitpvp.kits.Kit;
 import de.superhellth.kitpvp.main.Kitpvp;
-import de.superhellth.kitpvp.util.Chat;
+import de.superhellth.kitpvp.chat.Chat;
 import de.superhellth.kitpvp.util.LocationChecker;
 import de.superhellth.kitpvp.util.TimeManager;
 import org.bukkit.*;
@@ -122,8 +122,7 @@ public class Game {
     }
 
     /**
-     * Broadcast a message to all game members
-     *
+     * Broadcast a message to all game members.
      * @param message
      * @param delay in seconds
      */
@@ -152,6 +151,7 @@ public class Game {
             selectedKits.remove(player);
         }
         alive.remove(player);
+        player.setGameMode(GameMode.SURVIVAL);
     }
 
     // select kit
@@ -283,6 +283,7 @@ public class Game {
         for (Player player : members) {
             player.teleport(center);
         }
+        members.clear();
 
         // reset borders
         for (World world : Kitpvp.getInstance().getServer().getWorlds()) {
@@ -290,6 +291,7 @@ public class Game {
             border.setCenter(0, 0);
             border.setSize(6000000);
         }
+
     }
 
     private Player getWinner() {

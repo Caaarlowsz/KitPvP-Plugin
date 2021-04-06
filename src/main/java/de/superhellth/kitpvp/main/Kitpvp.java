@@ -1,6 +1,7 @@
 package de.superhellth.kitpvp.main;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import de.superhellth.kitpvp.commands.KitpvpCommand;
 import de.superhellth.kitpvp.game.Game;
 import de.superhellth.kitpvp.kits.*;
@@ -9,7 +10,7 @@ import de.superhellth.kitpvp.listener.GraceListener;
 import de.superhellth.kitpvp.listener.KitSelectionListener;
 import de.superhellth.kitpvp.listener.PlayerDeathListener;
 import de.superhellth.kitpvp.listener.kitlistener.*;
-import de.superhellth.kitpvp.util.Chat;
+import de.superhellth.kitpvp.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -131,7 +132,7 @@ public final class Kitpvp extends JavaPlugin {
     }
 
     // finds game player currently is in
-    @NotNull
+    @Nullable
     public Game getGame(Player player) {
         for (Game aGame : games) {
             if (aGame.playedBy(player)) {

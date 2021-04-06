@@ -4,7 +4,7 @@ import de.superhellth.kitpvp.game.Game;
 import de.superhellth.kitpvp.game.Phase;
 import de.superhellth.kitpvp.kits.Kit;
 import de.superhellth.kitpvp.main.Kitpvp;
-import de.superhellth.kitpvp.util.Chat;
+import de.superhellth.kitpvp.chat.Chat;
 import de.superhellth.kitpvp.util.KitInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

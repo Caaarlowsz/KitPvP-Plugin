@@ -1,10 +1,13 @@
 package de.superhellth.kitpvp.commands;
 
+import com.sun.istack.internal.Nullable;
+import de.superhellth.kitpvp.chat.CommandOutput;
+import de.superhellth.kitpvp.chat.Error;
 import de.superhellth.kitpvp.game.Game;
 import de.superhellth.kitpvp.game.Phase;
 import de.superhellth.kitpvp.kits.Kit;
 import de.superhellth.kitpvp.main.Kitpvp;
-import de.superhellth.kitpvp.util.Chat;
+import de.superhellth.kitpvp.chat.Chat;
 import de.superhellth.kitpvp.util.ConfigWriter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -20,6 +23,8 @@ public class KitpvpCommand implements CommandExecutor {
     // The given arguments
     private String[] args;
     private Player player;
+    @Nullable
+    private Game game;
 
     // constructor
     public KitpvpCommand(Kitpvp plugin) {
@@ -32,6 +37,7 @@ public class KitpvpCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         this.player = (Player) sender;
         this.args = args;
+        game = plugin.getGame(player);
 
         // check if command has at least one argument
         hasCorrectArgs(1, Allow.OR_MORE);
@@ -40,49 +46,49 @@ public class KitpvpCommand implements CommandExecutor {
         switch (args[0].toLowerCase()) {
             case Commands.HELP:
                 if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
-                    Chat.sendMessage(player, Chat.HELP);
+                    Chat.sendMessage(player, CommandOutput.HELP);
                 }
                 break;
 
             case Commands.NEW_GAME:
                 if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
-                    newGame(player);
+                    newGame();
                 }
                 break;
 
             case Commands.INVITE:
                 if (hasCorrectArgs(2, Allow.ONLY_EQUAL)) {
-                    invite(player, args[1]);
+                    invite(args[1]);
                 }
                 break;
 
             case Commands.ACCEPT:
                 if (hasCorrectArgs(2, Allow.ONLY_EQUAL)) {
-                    acceptInvite(player, args[1]);
+                    acceptInvite(args[1]);
                 }
                 break;
 
             case Commands.LIST:
                 if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
-                    list(player);
+                    list();
                 }
                 break;
 
             case Commands.START:
                 if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
-                    start(player);
+                    start();
                 }
                 break;
 
             case Commands.LEAVE:
                 if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
-                    leaveGame(player);
+                    leaveGame();
                 }
                 break;
 
             case Commands.STOP:
                 if (hasCorrectArgs(1, Allow.ONLY_EQUAL)) {
-                    stopGame(player);
+                    stopGame();
                 }
                 break;
 
@@ -93,162 +99,170 @@ public class KitpvpCommand implements CommandExecutor {
                 break;
 
             default:
-                Chat.sendMessage(player, Chat.UNKNOWN);
+                Chat.sendMessage(player, Error.UNKNOWN);
                 break;
         }
 
         return true;
     }
 
-    // manage config commands
+    /**
+     * Manages all </kp config ...> commands.
+     */
     private void config() {
         if (hasCorrectArgs(2, Allow.OR_MORE)) {
             switch (args[1].toLowerCase()) {
+
+                // changing the size of the map
                 case Commands.MAP_SIZE:
-                    try {
-                        ConfigWriter.updateSize(Integer.parseInt(args[2]));
-                    } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                        Chat.sendMessage(player, "Type a number!");
-                        return;
+                    if (hasCorrectArgs(3, Allow.ONLY_EQUAL)) {
+                        try {
+                            ConfigWriter.updateSize(Integer.parseInt(args[2]));
+                        } catch (NumberFormatException e) {
+                            Chat.sendMessage(player, Error.NO_NUMBER);
+                            return;
+                        }
+                        Chat.sendMessage(player, CommandOutput.CHANGED_MAP_SIZE);
                     }
-                    Chat.sendMessage(player, "Successfully changed map size!");
                     break;
 
+                // changing the center of the map
                 case Commands.MAP_CENTER:
                     if (hasCorrectArgs(2, Allow.ONLY_EQUAL)) {
                         ConfigWriter.updateCenter(player.getLocation());
-                        Chat.sendMessage(player, Chat.CHANGED_MAP_CENTER);
+                        Chat.sendMessage(player, CommandOutput.CHANGED_MAP_CENTER);
                     }
                     break;
 
+                // command not found
                 default:
-                    Chat.sendMessage(player, "Unknown command");
+                    Chat.sendMessage(player, Error.UNKNOWN);
                     break;
             }
         }
     }
 
-    // creates a new game
-    // player is the host of this game
-    private void newGame(Player player) {
+    /**
+     * Creates a new game.
+     */
+    private void newGame() {
         if (!plugin.isInGame(player)) {
-            Kitpvp.getInstance().reloadConfig();
-            Kitpvp.getInstance().loadConfig();
-            plugin.getGames().add(new Game(player));
-            Chat.sendMessage(player, "You have successfully created a new game!" +
-                    "\nUse /kitpvp invite <player> to invite a friend!");
+            plugin.reloadConfig();
+            plugin.loadConfig();
+            Game aGame = new Game(player);
+            plugin.getGames().add(aGame);
+            game = aGame;
+            Chat.sendMessage(player, CommandOutput.CREATED_GAME);
         } else {
-            Chat.sendMessage(player, "You are already in a game!");
+            Chat.sendMessage(player, Error.YOU_ARE_IN_GAME);
         }
     }
 
-    // invites player to a game
-    private void invite(Player player, String invitedStr) {
-        if (invitedStr == null) {
-            Chat.sendMessage(player, "/kitpvp invite <player>");
-            return;
-        }
+    /**
+     * Invites a player to the game.
+     * @param invitedStr Name of the invited player
+     */
+    private void invite(String invitedStr) {
         Player invited = plugin.getServer().getPlayer(invitedStr);
         if (invited == null) {
-            Chat.sendMessage(player, "Couldn't find player!");
+            Chat.sendMessage(player, Error.WRONG_PLAYER_NAME);
             return;
         }
         if (plugin.isInGame(invited)) {
-            Chat.sendMessage(player, "This player is currently in a game, wait until he is finished!");
+            Chat.sendMessage(player, Error.OTHER_PLAYER_IS_IN_GAME);
             return;
         }
-        if (!(plugin.isInGame(player))) {
-            start(player);
-        }
-        if (plugin.getGame(player).getHost() != player) {
-            Chat.sendMessage(player, "You are not the host of this game. Only the host can invite new players.");
-            return;
-        }
-        if (plugin.getGame(player).getCurrentPhase() != Phase.INVITATION) {
-            Chat.sendMessage(player, "You can only invite players during invitation phase!");
-            return;
-        }
-        if (plugin.getGame(player).getInvited().contains(invited)) {
-            Chat.sendMessage(player, "You have already invited this player to your game. Wait for his response.");
-            return;
-        }
-        plugin.getGame(player).getInvited().add(invited);
-        Chat.sendMessage(player, "You have invited " + invited.getDisplayName() + " to your game. \n" +
-                "Let's wait for his response!");
-        Chat.sendMessage(invited, "You have been invited to a KitPvP game by " + player.getName()
-                + "\nUse /kitpvp accept " + player.getDisplayName() + " to accept the invitation!");
-    }
-
-    // accept a game invite
-    private void acceptInvite(Player invited, String invitingStr) {
-        Player inviting = plugin.getServer().getPlayer(invitingStr);
-        Game invitedTo = plugin.getGame(inviting);
-        if (!invitedTo.getInvited().contains(invited)) {
-            Chat.sendMessage(invited, "You haven't received an invitation from this player.");
-            return;
-        }
-        if (invitedTo.getCurrentPhase() != Phase.INVITATION) {
-            Chat.sendMessage(invited, "The game is already running, you cant join now!");
-            return;
-        }
-        invitedTo.addPlayer(invited);
-        Chat.sendMessage(invited, "You have successfully joined superhellth's game!");
-        for (Player player : invitedTo.getMembers()) {
-            Chat.sendMessage(player, invited.getDisplayName() + " has joined the game!\n Say Hi!");
-        }
-        invitedTo.getInvited().remove(invited);
-    }
-
-    // start game
-    private void start(Player player) {
-        Game game = plugin.getGame(player);
         if (game == null) {
-            Chat.sendMessage(player, "You currently not in a game!");
-            return;
+            newGame();
         }
         if (game.getHost() != player) {
-            Chat.sendMessage(player, "You are not the host of this game!");
+            Chat.sendMessage(player, Error.NOT_HOST);
             return;
         }
         if (game.getCurrentPhase() != Phase.INVITATION) {
-            Chat.sendMessage(player, "You aren't in the invitation phase anymore!");
+            Chat.sendMessage(player, Error.WRONG_PHASE);
+            return;
+        }
+        if (game.getInvited().contains(invited)) {
+            Chat.sendMessage(player, Error.ALREADY_INVITED);
+            return;
+        }
+        game.getInvited().add(invited);
+        Chat.sendMessage(player, invited.getDisplayName() + CommandOutput.INVITED_PLAYER);
+        Chat.sendMessage(invited, CommandOutput.BEING_INVITED + player.getName()
+                + "\n" + CommandOutput.ACCEPT_INVITE + player.getName());
+    }
+
+    /**
+     * Accept the invitation to a game
+     * @param invitingStr Name of the inviting player
+     */
+    private void acceptInvite(String invitingStr) {
+        Player inviting = plugin.getServer().getPlayer(invitingStr);
+        Game invitedTo = plugin.getGame(inviting);
+        if (!invitedTo.getInvited().contains(player)) {
+            Chat.sendMessage(player, Error.NO_INVITATION);
+            return;
+        }
+        if (invitedTo.getCurrentPhase() != Phase.INVITATION) {
+            Chat.sendMessage(player, Error.GAME_RUNNING);
+            return;
+        }
+        invitedTo.addPlayer(player);
+        Chat.sendMessage(player, CommandOutput.ACCEPTED_INVITE);
+        for (Player player : invitedTo.getMembers()) {
+            Chat.sendMessage(player, player.getDisplayName() + CommandOutput.PLAYER_JOINED);
+        }
+        invitedTo.getInvited().remove(player);
+    }
+
+    /**
+     * Start the game as a host.
+     */
+    private void start() {
+        Game game = plugin.getGame(player);
+        if (game == null) {
+            Chat.sendMessage(player, Error.NOT_IN_GAME);
+            return;
+        }
+        if (game.getHost() != player) {
+            Chat.sendMessage(player, Error.NOT_HOST);
+            return;
+        }
+        if (game.getCurrentPhase() != Phase.INVITATION) {
+            Chat.sendMessage(player, Error.WRONG_PHASE);
             return;
         }
         game.startKitSelection();
     }
 
-    // provides a list of all available kits
-    private void listKits(Player player) {
-        StringBuilder message = new StringBuilder("Available Kits:\n");
-        for (Kit kit : plugin.getKits()) {
-            message.append(kit.getColor()).append("").append(ChatColor.BOLD).append(kit.getName()).append("\n");
-        }
-
-        Chat.sendMessage(player, message.toString());
-    }
-
-    // provides a list of game members
-    private void list(Player player) {
+    /**
+     * Provides a list of game members.
+     */
+    private void list() {
         Game game = plugin.getGame(player);
         if (game == null) {
-            Chat.sendMessage(player, "You are currently in no game.");
+            Chat.sendMessage(player, Error.NOT_IN_GAME);
             return;
         }
-        String message = "You are currently playing with:\n";
+        StringBuilder messageBuilder = new StringBuilder(CommandOutput.LIST);
         for (Player aPlayer : game.getMembers()) {
             if (aPlayer != player) {
-                message += (aPlayer.getDisplayName() + "\n");
+                messageBuilder.append(aPlayer.getDisplayName()).append("\n");
             }
         }
-        message += "... and yourself! :D";
+        String message = messageBuilder.toString();
+        message += "yourself";
 
         Chat.sendMessage(player, message);
     }
 
-    // leave the current game
-    private void leaveGame(Player player) {
+    /**
+     * Leave the current game.
+     */
+    private void leaveGame() {
         if (!plugin.isInGame(player)) {
-            Chat.sendMessage(player, "You are currently not in a game!");
+            Chat.sendMessage(player, Error.NOT_IN_GAME);
         } else {
             Game playedByPlayer = plugin.getGame(player);
             playedByPlayer.removePlayer(player);
@@ -256,30 +270,35 @@ public class KitpvpCommand implements CommandExecutor {
                 playedByPlayer.end(false);
                 plugin.getGames().remove(playedByPlayer);
             }
-            Chat.sendMessage(player, "You left your game!");
+            Chat.sendMessage(player, CommandOutput.LEFT);
         }
     }
 
-    // stops and deletes the current game
-    private void stopGame(Player player) {
+    /**
+     * Stops and deletes the current game.
+     */
+    private void stopGame() {
         Game game = plugin.getGame(player);
         if (game == null) {
-            Chat.sendMessage(player, "You are currently not in a game!");
+            Chat.sendMessage(player, Error.NOT_IN_GAME);
             return;
         }
         if (game.getHost() != player) {
-            Chat.sendMessage(player, "Only the host can stop the game!");
+            Chat.sendMessage(player, Error.NOT_HOST);
             return;
         }
         game.end(false);
         plugin.getGames().remove(game);
-        Chat.sendMessage(player, "The game has been stopped!");
+        for (Player player : game.getMembers()) {
+            Chat.sendMessage(player, CommandOutput.STOP);
+        }
     }
 
     /**
      * Check whether or not the number of arguments is correct
+     *
      * @param numArgs Number of arguments the command is supposed to have
-     * @param option Determines whether the number of arguments in the command can be greater or smaller
+     * @param option  Determines whether the number of arguments in the command can be greater or smaller
      * @return
      */
     private boolean hasCorrectArgs(int numArgs, Allow option) {
@@ -289,21 +308,21 @@ public class KitpvpCommand implements CommandExecutor {
                 if (givenArgs == numArgs || givenArgs < numArgs) {
                     return true;
                 }
-                Chat.sendMessage(player, Chat.TOO_MANY_ARGS);
+                Chat.sendMessage(player, Error.TOO_MANY_ARGS);
                 break;
 
             case ONLY_EQUAL:
                 if (givenArgs == numArgs) {
                     return true;
                 }
-                Chat.sendMessage(player, Chat.NOT_RIGHT_ARGS);
+                Chat.sendMessage(player, Error.NOT_RIGHT_ARGS);
                 break;
 
             case OR_MORE:
                 if (givenArgs == numArgs || givenArgs > numArgs) {
                     return true;
                 }
-                Chat.sendMessage(player, Chat.TOO_FEW_ARGS);
+                Chat.sendMessage(player, Error.TOO_FEW_ARGS);
                 break;
         }
         return false;
