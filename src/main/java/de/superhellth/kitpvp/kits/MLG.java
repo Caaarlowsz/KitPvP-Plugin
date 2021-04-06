@@ -3,6 +3,8 @@ package de.superhellth.kitpvp.kits;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
+import java.util.Arrays;
+
 public class MLG extends Kit {
 
     // singleton pattern
@@ -23,6 +25,16 @@ public class MLG extends Kit {
     @Override
     public void setColor() {
         color = ChatColor.DARK_RED;
+    }
+
+    @Override
+    public void setView() {
+        view = Material.TNT;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("");
     }
 
     @Override

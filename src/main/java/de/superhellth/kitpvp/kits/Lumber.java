@@ -6,6 +6,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Arrays;
+
 // special ability: can mine entire trees
 public class Lumber extends Kit {
 
@@ -27,6 +29,16 @@ public class Lumber extends Kit {
     @Override
     public void setColor() {
         color = ChatColor.DARK_GREEN;
+    }
+
+    @Override
+    public void setView() {
+        view = Material.OAK_LOG;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("");
     }
 
     @Override

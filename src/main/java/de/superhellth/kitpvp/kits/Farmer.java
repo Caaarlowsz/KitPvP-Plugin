@@ -6,6 +6,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Arrays;
+
 public class Farmer extends Kit {
 
     // singleton pattern
@@ -26,6 +28,16 @@ public class Farmer extends Kit {
     @Override
     public void setColor() {
         color = ChatColor.GREEN;
+    }
+
+    @Override
+    public void setView() {
+        view = Material.WHEAT;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("");
     }
 
     @Override

@@ -3,6 +3,8 @@ package de.superhellth.kitpvp.kits;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
+import java.util.Arrays;
+
 public class Witch extends Kit {
 
     // singleton pattern
@@ -23,6 +25,16 @@ public class Witch extends Kit {
     @Override
     public void setColor() {
         color = ChatColor.LIGHT_PURPLE;
+    }
+
+    @Override
+    public void setView() {
+        view = Material.POTION;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("");
     }
 
     @Override

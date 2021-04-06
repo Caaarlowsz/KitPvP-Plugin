@@ -3,6 +3,8 @@ package de.superhellth.kitpvp.kits;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
+import java.util.Arrays;
+
 public class Trapper extends Kit {
 
     // singleton pattern
@@ -23,6 +25,16 @@ public class Trapper extends Kit {
     @Override
     public void setColor() {
         color = ChatColor.DARK_GRAY;
+    }
+
+    @Override
+    public void setView() {
+        view = Material.STICKY_PISTON;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("");
     }
 
     @Override

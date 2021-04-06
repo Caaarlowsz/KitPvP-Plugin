@@ -3,6 +3,8 @@ package de.superhellth.kitpvp.kits;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
+import java.util.Arrays;
+
 public class Enchanter extends Kit {
 
     // singleton pattern
@@ -23,6 +25,16 @@ public class Enchanter extends Kit {
     @Override
     public void setColor() {
         color = ChatColor.DARK_PURPLE;
+    }
+
+    @Override
+    public void setView() {
+        view = Material.ENCHANTING_TABLE;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("A wizard who can enchant his gear high level.");
     }
 
     @Override

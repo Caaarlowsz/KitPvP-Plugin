@@ -35,7 +35,7 @@ public class PlayerDeathListener implements Listener {
 
         // check if second to last player died
         if (getAlive(game) == 1) {
-            game.end();
+            game.end(true);
         }
     }
 

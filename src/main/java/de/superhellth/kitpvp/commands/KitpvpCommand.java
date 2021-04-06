@@ -1,6 +1,5 @@
 package de.superhellth.kitpvp.commands;
 
-import de.superhellth.kitpvp.events.ReadyEvent;
 import de.superhellth.kitpvp.game.Game;
 import de.superhellth.kitpvp.game.Phase;
 import de.superhellth.kitpvp.kits.Kit;
@@ -75,18 +74,6 @@ public class KitpvpCommand implements CommandExecutor {
 
             case "kits":
                 listKits(player);
-                break;
-
-            case "select":
-                try {
-                    selectKit(player, args[1]);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    Chat.sendMessage(player, "Try /kitpvp select <kit>");
-                }
-                break;
-
-            case "ready":
-                ready(player);
                 break;
 
             case "leave":
@@ -241,37 +228,6 @@ public class KitpvpCommand implements CommandExecutor {
         Chat.sendMessage(player, message.toString());
     }
 
-    // select kit
-    private void selectKit(Player player, String kitName) {
-        Game game = plugin.getGame(player);
-        if (game == null) {
-            Chat.sendMessage(player, "You are currently not in a game!");
-            return;
-        }
-        if (game.getCurrentPhase() != Phase.KIT_SELECTION) {
-            Chat.sendMessage(player, ChatColor.BOLD + "You are not in the kit selection phase!");
-            return;
-        }
-        Kit selected = plugin.getKit(kitName);
-        if (selected == null) {
-            Chat.sendMessage(player, "This is not a valid kit name! Type /kitpvp kits for a list of available kits.");
-            return;
-        }
-        game.selectKit(player, selected);
-        Chat.sendMessage(player, "You have successfully selected the " + selected.getColor() + "" + ChatColor.BOLD
-                + selected.getName() + "§r" + Chat.BASE_COLOR + " kit!");
-    }
-
-    // ready
-    private void ready(Player player) {
-        if (plugin.getGame(player) == null || plugin.getGame(player).getCurrentPhase() != Phase.KIT_SELECTION) {
-            Chat.sendMessage(player, "You can't /kitpvp ready right now!");
-            return;
-        }
-        ReadyEvent event = new ReadyEvent(player);
-        Bukkit.getPluginManager().callEvent(event);
-    }
-
     // provides a list of game members
     private void list(Player player) {
         Game game = plugin.getGame(player);
@@ -298,6 +254,7 @@ public class KitpvpCommand implements CommandExecutor {
             Game playedByPlayer = plugin.getGame(player);
             playedByPlayer.removePlayer(player);
             if (playedByPlayer.getMembers().size() <= 0) {
+                playedByPlayer.end(false);
                 plugin.getGames().remove(playedByPlayer);
             }
             Chat.sendMessage(player, "You left your game!");
@@ -315,6 +272,7 @@ public class KitpvpCommand implements CommandExecutor {
             Chat.sendMessage(player, "Only the host can stop the game!");
             return;
         }
+        game.end(false);
         plugin.getGames().remove(game);
         Chat.sendMessage(player, "The game has been stopped!");
     }

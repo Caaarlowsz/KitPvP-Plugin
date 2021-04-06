@@ -3,6 +3,10 @@ package de.superhellth.kitpvp.kits;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.Arrays;
 
 public class Rusher extends Kit {
 
@@ -27,6 +31,16 @@ public class Rusher extends Kit {
     }
 
     @Override
+    public void setView() {
+        view = Material.STONE_SWORD;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("");
+    }
+
+    @Override
     public void setItems() {
         quickAdd(Material.STONE_SWORD, 1);
         quickAdd(Material.OAK_PLANKS, 64);
@@ -43,6 +57,6 @@ public class Rusher extends Kit {
 
     @Override
     public void setEffects() {
-
+        effects.add(new PotionEffect(PotionEffectType.SPEED, 4 * 60 * 20, 0, false, false));
     }
 }

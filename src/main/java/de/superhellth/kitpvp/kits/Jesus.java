@@ -8,6 +8,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 public class Jesus extends Kit {
@@ -30,6 +31,16 @@ public class Jesus extends Kit {
     @Override
     public void setColor() {
         color = ChatColor.WHITE;
+    }
+
+    @Override
+    public void setView() {
+        view = Material.TOTEM_OF_UNDYING;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("");
     }
 
     @Override

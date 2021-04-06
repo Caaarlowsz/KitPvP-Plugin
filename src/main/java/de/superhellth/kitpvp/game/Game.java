@@ -4,10 +4,12 @@ import de.superhellth.kitpvp.kits.Kit;
 import de.superhellth.kitpvp.main.Kitpvp;
 import de.superhellth.kitpvp.ui.Chat;
 import de.superhellth.kitpvp.util.LocationChecker;
+import de.superhellth.kitpvp.util.TimeManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -23,7 +25,6 @@ public class Game {
     private final List<Player> invited;
     private final Map<Player, Kit> selectedKits;
     private final Map<Player, Boolean> alive;
-    private final List<Player> readyPlayers;
     private final List<Block> placedBlocks;
 
     public Game(Player host) {
@@ -32,15 +33,22 @@ public class Game {
         invited = new ArrayList<>();
         selectedKits = new HashMap<>();
         alive = new HashMap<>();
-        readyPlayers = new ArrayList<>();
         placedBlocks = Collections.synchronizedList(new ArrayList<>());
         members.add(host);
         currentPhase = Phase.INVITATION;
     }
 
-    // start kit selection phase
+    /**
+     * Starts the kit selection phase. Only method needed to start the game
+     */
     public void startKitSelection() {
-        // remove effect, give resistance and heal player
+        // remove effects, heal player and give kit selector
+        ItemStack kitSelector = new ItemStack(Material.CHEST, 1);
+        ItemMeta selectorMeta = kitSelector.getItemMeta();
+        selectorMeta.setDisplayName(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Kit Selector");
+        selectorMeta.setLore(Arrays.asList("Right click to select your kit!"));
+        kitSelector.setItemMeta(selectorMeta);
+
         for (Player player : members) {
             for (PotionEffect potionEffect : player.getActivePotionEffects()) {
                 player.removePotionEffect(potionEffect.getType());
@@ -49,15 +57,31 @@ public class Game {
             player.setHealth(20);
             player.setSaturation(20);
             player.setFoodLevel(20);
-            player.addPotionEffect(
-                    new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 70 * 60 * 20, 255));
+            player.getInventory().clear();
+            player.getInventory().setItem(8, kitSelector);
+            player.setGameMode(GameMode.ADVENTURE);
         }
 
+        // in seconds
+        int kitSelectionTime = 60;
         currentPhase = Phase.KIT_SELECTION;
         broadcast(ChatColor.BOLD + "Kit selection phase has begun!\n§r" + Chat.BASE_COLOR +
-                "You can now select your kit with /kitpvp select <kit>\n" +
-                "Type /kitpvp kits to see which kits are available!\n" +
-                "Type /kitpvp ready when you have chosen your kit, or want to play with a random kit.");
+                "You have " + TimeManager.getSecondsAsString(kitSelectionTime) + " to select your kit.");
+        broadcastDelayedMessage("The game starts in " + TimeManager.getSecondsAsString(kitSelectionTime / 2),
+                kitSelectionTime / 2);
+        broadcastDelayedMessage("The game starts in " + TimeManager.getSecondsAsString(kitSelectionTime / 4),
+                kitSelectionTime / 4 * 3 );
+        for (int c = 0; c < 10; c++) {
+            broadcastDelayedMessage(ChatColor.BOLD + "" + (10 - c) + "",  kitSelectionTime - 10 + c);
+        }
+
+        // start grace period
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Kitpvp.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                start();
+            }
+        }, kitSelectionTime * 20);
     }
 
     // start actual game
@@ -78,16 +102,17 @@ public class Game {
 
         // set grace period
         currentPhase = Phase.GRACE;
-        //int timeToCD = 4 * 60 + 49;
-        int timeToCD = 2 * 60;
-        broadcastDelayedMessage(ChatColor.BOLD + "The grace period will end in...\n 10 seconds", timeToCD);
-        for (int c = 0; c < 10; c++) {
-            broadcastDelayedMessage(ChatColor.BOLD + "" + (10 - c) + "", timeToCD + 1 + c);
-        }
-
         // setup world border
         setupWorldAndPlayerPosition();
         deployKits();
+
+        //int timeToCD = 4 * 60 + 49;
+        int timeToCD = 2 * 60;
+        broadcast("The grace period has begun. It lasts for " + TimeManager.getSecondsAsString(timeToCD) + "!");
+        broadcastDelayedMessage(ChatColor.BOLD + "The grace period will end in...", timeToCD);
+        for (int c = 0; c < 10; c++) {
+            broadcastDelayedMessage(ChatColor.BOLD + "" + (10 - c) + "", timeToCD + 1 + c);
+        }
         Bukkit.getScheduler().scheduleSyncDelayedTask(Kitpvp.getInstance(), new Runnable() {
             @Override
             public void run() {
@@ -123,9 +148,6 @@ public class Game {
         members.remove(player);
         if (host == player && members.size() >= 1) {
             host = members.get(0);
-        }
-        if (readyPlayers.contains(player)) {
-            readyPlayers.remove(player);
         }
         if (selectedKits.keySet().contains(player)) {
             selectedKits.remove(player);
@@ -230,7 +252,6 @@ public class Game {
             player.setHealth(20);
             player.setSaturation(20);
             player.setFoodLevel(20);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 5 * 20, 100));
             player.getInventory().clear();
         }
 
@@ -250,29 +271,15 @@ public class Game {
         }
     }
 
-    // check if all players are ready
-    public void checkPlayer(Player player) {
-        Chat.sendMessage(player, "You are marked as ready!");
-        readyPlayers.add(player);
-        boolean allReady = true;
-        for (Player aPlayer : members) {
-            if (!readyPlayers.contains(aPlayer)) {
-                allReady = false;
-            }
-        }
-
-        if (allReady) {
-            start();
-        }
-    }
-
     // ends the game
-    public void end() {
-        broadcast("The game is over! The winner is "
-                + getWinner().getDisplayName() + "! Congratulations!");
+    public void end(boolean hasWinner) {
+        if (hasWinner) {
+            broadcast("The game is over! The winner is "
+                    + getWinner().getDisplayName() + "! Congratulations!");
 
-        // teleport everyone to the  center
-        getWinner().setGameMode(GameMode.SPECTATOR);
+            // teleport everyone to the  center
+            getWinner().setGameMode(GameMode.SPECTATOR);
+        }
         Location center = Kitpvp.getInstance().getMapCenter();
         for (Player player : members) {
             player.teleport(center);

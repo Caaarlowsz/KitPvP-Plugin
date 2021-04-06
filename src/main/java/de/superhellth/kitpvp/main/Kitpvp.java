@@ -6,12 +6,13 @@ import de.superhellth.kitpvp.game.Game;
 import de.superhellth.kitpvp.kits.*;
 import de.superhellth.kitpvp.listener.BlockPlaceListener;
 import de.superhellth.kitpvp.listener.GraceListener;
+import de.superhellth.kitpvp.listener.KitSelectionListener;
 import de.superhellth.kitpvp.listener.PlayerDeathListener;
-import de.superhellth.kitpvp.listener.ReadyListener;
 import de.superhellth.kitpvp.listener.kitlistener.*;
 import de.superhellth.kitpvp.ui.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,7 +34,7 @@ public final class Kitpvp extends JavaPlugin {
     private Location mapCenter;
 
     private List<Game> games;
-    private Map<String, Kit> kitMap;
+    private Map<Material, Kit> kitMap;
 
     // singleton pattern
     private static Kitpvp instance;
@@ -47,8 +48,6 @@ public final class Kitpvp extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // check if config exists
-
         // log start message
         log("Plugin started");
         instance = this;
@@ -66,9 +65,9 @@ public final class Kitpvp extends JavaPlugin {
 
         // Register listener
         registerListeners(new PlayerDeathListener(this),
-                new ReadyListener(this),
                 new BlockPlaceListener(),
-                new GraceListener());
+                new GraceListener(),
+                new KitSelectionListener());
 
         // Kit Listener
         registerListeners(new BWListener(this),
@@ -83,8 +82,16 @@ public final class Kitpvp extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         saveConfig();
+
+        // Stop all games
+        for (Game game : games) {
+            game.end(false);
+        }
     }
 
+    /**
+     * Load all values stored in the config file to the according variable
+     */
     public void loadConfig() {
         try {
             mapCenter = Location.deserialize(getConfig().getConfigurationSection(MAP_CENTER).getValues(false));
@@ -97,7 +104,11 @@ public final class Kitpvp extends JavaPlugin {
         }
     }
 
-    // log a message
+    /**
+     * Log a message to the console. Has a plugin-specific prefix
+     *
+     * @param text
+     */
     public void log(String text) {
         Bukkit.getConsoleSender().sendMessage(Chat.PREFIX + text);
     }
@@ -115,12 +126,8 @@ public final class Kitpvp extends JavaPlugin {
 
     // get kit
     // doesnt matter if letter are written capital or not
-    public Kit getKit(String name) {
-        name = name.toLowerCase();
-        String firstLetter = name.substring(0, 1).toUpperCase();
-        String rest = name.substring(1);
-        name = firstLetter + rest;
-        return kitMap.getOrDefault(name, null);
+    public Kit getKit(Material view) {
+        return kitMap.getOrDefault(view, null);
     }
 
     // finds game player currently is in
@@ -169,9 +176,10 @@ public final class Kitpvp extends JavaPlugin {
         kits.add(Jesus.getInstance());
         kits.add(Zeus.getInstance());
         kits.add(Soup.getInstance());
+        kits.add(Trapper.getInstance());
 
         for (Kit kit : kits) {
-            kitMap.put(kit.getName(), kit);
+            kitMap.put(kit.getView(), kit);
         }
     }
 

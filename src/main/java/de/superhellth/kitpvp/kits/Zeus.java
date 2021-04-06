@@ -32,6 +32,16 @@ public class Zeus extends Kit {
     }
 
     @Override
+    public void setView() {
+        view = Material.BLAZE_ROD;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("");
+    }
+
+    @Override
     public void setItems() {
         ItemStack trigger = new ItemStack(TRIGGER_MAT, 4);
         ItemMeta meta = trigger.getItemMeta();

@@ -3,6 +3,8 @@ package de.superhellth.kitpvp.kits;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
+import java.util.Arrays;
+
 public class Soup extends Kit {
 
     private final int soupAmount = 18;
@@ -26,6 +28,16 @@ public class Soup extends Kit {
     @Override
     public void setColor() {
         color = ChatColor.YELLOW;
+    }
+
+    @Override
+    public void setView() {
+        view = Material.MUSHROOM_STEW;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("");
     }
 
     @Override

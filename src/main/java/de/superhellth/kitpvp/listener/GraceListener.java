@@ -1,5 +1,6 @@
 package de.superhellth.kitpvp.listener;
 
+import de.superhellth.kitpvp.game.Game;
 import de.superhellth.kitpvp.game.Phase;
 import de.superhellth.kitpvp.main.Kitpvp;
 import org.bukkit.entity.Player;
@@ -15,7 +16,8 @@ public class GraceListener implements Listener {
             Player damaged = (Player) event.getEntity();
             Kitpvp plugin = Kitpvp.getInstance();
             if (plugin.isInGame(damaged)) {
-                if (plugin.getGame(damaged).getCurrentPhase() == Phase.GRACE) {
+                Game game = plugin.getGame(damaged);
+                if (game.getCurrentPhase() == Phase.GRACE || game.getCurrentPhase() == Phase.KIT_SELECTION) {
                     event.setCancelled(true);
                 }
             }

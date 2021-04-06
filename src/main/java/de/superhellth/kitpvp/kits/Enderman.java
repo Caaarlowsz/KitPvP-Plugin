@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import java.util.Arrays;
+
 // Special ability: Doesn't take ender pearl damage
 public class Enderman extends Kit {
 
@@ -29,6 +31,16 @@ public class Enderman extends Kit {
     @Override
     public void setColor() {
         color = ChatColor.BLACK;
+    }
+
+    @Override
+    public void setView() {
+        view = Material.ENDER_PEARL;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("");
     }
 
     @Override

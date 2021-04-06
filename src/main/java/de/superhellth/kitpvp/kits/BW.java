@@ -11,6 +11,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
+import java.util.Arrays;
+
 public class BW extends Kit {
 
     // singleton pattern
@@ -31,6 +33,16 @@ public class BW extends Kit {
     @Override
     public void setColor() {
         color = ChatColor.DARK_AQUA;
+    }
+
+    @Override
+    public void setView() {
+        view = Material.RED_BED;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("Is a stacked bedwars player.", "Therefore can't mine naturally generated Blocks");
     }
 
     @Override

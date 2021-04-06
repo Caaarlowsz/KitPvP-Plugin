@@ -1,7 +1,6 @@
 package de.superhellth.kitpvp.kits;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -17,10 +16,14 @@ public abstract class Kit {
     protected List<ItemStack> items;
     protected ItemStack[] armor;
     protected List<PotionEffect> effects;
+    protected Material view;
+    protected List<String> lore;
 
     protected Kit() {
         setName();
         setColor();
+        setView();
+        setLore();
         items = new ArrayList<>();
         setItems();
         armor = new ItemStack[4];
@@ -36,6 +39,9 @@ public abstract class Kit {
     public ChatColor getColor() {
         return color;
     }
+    public List<String> getLore() {
+        return lore;
+    }
     public List<ItemStack> getItems() {
         return items;
     }
@@ -45,10 +51,15 @@ public abstract class Kit {
     public List<PotionEffect> getEffects() {
         return effects;
     }
+    public Material getView() {
+        return view;
+    }
 
     // Setter
     public abstract void setName();
     public abstract void setColor();
+    public abstract void setView();
+    public abstract void setLore();
     public abstract void setItems();
     public abstract void setArmor();
     public abstract void setEffects();

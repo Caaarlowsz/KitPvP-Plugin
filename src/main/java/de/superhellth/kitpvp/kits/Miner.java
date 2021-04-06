@@ -8,6 +8,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
+
 public class Miner extends Kit {
 
     // singleton pattern
@@ -28,6 +30,16 @@ public class Miner extends Kit {
     @Override
     public void setColor() {
         color = ChatColor.DARK_BLUE;
+    }
+
+    @Override
+    public void setView() {
+        view = Material.DIAMOND_PICKAXE;
+    }
+
+    @Override
+    public void setLore() {
+        lore = Arrays.asList("");
     }
 
     @Override
