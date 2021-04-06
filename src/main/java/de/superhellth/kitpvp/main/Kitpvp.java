@@ -175,6 +175,7 @@ public final class Kitpvp extends JavaPlugin {
         kits.add(Soup.getInstance());
         kits.add(Trapper.getInstance());
         kits.add(Pyro.getInstance());
+        kits.add(Tank.getInstance());
 
         for (Kit kit : kits) {
             kitMap.put(kit.getView(), kit);

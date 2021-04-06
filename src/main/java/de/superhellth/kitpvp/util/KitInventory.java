@@ -69,7 +69,7 @@ public class KitInventory {
             ItemStack currentArmor = kit.getArmor()[i];
             if (currentArmor != null) {
                 if (!desc.contains("Armor:")) {
-                    if (desc.get(desc.size() - 1).contains("-")) {
+                    if (desc.size() > 0 && desc.get(desc.size() - 1).contains("-")) {
                         desc.add("");
                     }
                     desc.add("Armor:");
@@ -83,7 +83,7 @@ public class KitInventory {
         }
 
         if (kit.getEffects().size() > 0) {
-            if (desc.get(desc.size() - 1).contains("-")) {
+            if (desc.size() > 0 && desc.get(desc.size() - 1).contains("-")) {
                 desc.add("");
             }
             desc.add("Effects:");

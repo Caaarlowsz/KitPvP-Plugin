@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -47,9 +48,10 @@ public class Pyro extends Kit {
         quickAdd(Material.LAVA_BUCKET, 1);
         quickAdd(Material.LAVA_BUCKET, 1);
         quickAdd(Material.LAVA_BUCKET, 1);
-        ItemStack book = new ItemStack(Material.BOOK, 1);
-        book.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 1);
-        book.addUnsafeEnchantment(Enchantment.ARROW_FIRE, 1);
+        ItemStack book = new ItemStack(Material.ENCHANTED_BOOK, 1);
+        EnchantmentStorageMeta meta = (EnchantmentStorageMeta) book.getItemMeta();
+        meta.addStoredEnchant(Enchantment.FIRE_ASPECT, 1, false);
+        book.setItemMeta(meta);
         items.add(book);
     }
 
