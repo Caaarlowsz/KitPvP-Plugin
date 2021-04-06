@@ -35,11 +35,11 @@ A mc-spigot plugin for kit pvp
 * **Trapper**
   * Can trap his opponents with a variety of redstone materials  
 * **Souper**
-  * A traditional soup kit
-
-### Coming soon:
+  * A traditional soup kit  
 * **Pyro**
   * Is resistant to any kind of fire damage
+
+### Coming soon:
 * **Dolphin**
   * Is quick and strong under water
   * Isn't too strong on land
@@ -52,10 +52,7 @@ A mc-spigot plugin for kit pvp
 > Invite a player to your current game  
 
 /kp start  
-> Starts the kit selection phase  
-
-/kp kits  
-> Provides a list of all available kits  
+> Starts the kit selection phase    
 
 /kp leave  
 > Leave your current game  
