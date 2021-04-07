@@ -37,12 +37,10 @@ A mc-spigot plugin for kit pvp
 * **Souper**
   * A traditional soup kit  
 * **Pyro**
-  * Is resistant to any kind of fire damage
-
-### Coming soon:
+  * Is resistant to any kind of fire damage  
 * **Dolphin**
   * Is quick and strong under water
-  * Isn't too strong on land
+  * Isn't too strong on land  
 
 ## Commands:
 /kp newgame 
