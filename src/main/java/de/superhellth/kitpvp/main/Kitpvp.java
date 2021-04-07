@@ -17,10 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class Kitpvp extends JavaPlugin {
 
@@ -58,7 +55,7 @@ public final class Kitpvp extends JavaPlugin {
 
         // create games list
         games = new ArrayList<>();
-        kitMap = new HashMap<>();
+        kitMap = new LinkedHashMap<>();
         registerKits();
 
         // Register command
@@ -76,7 +73,8 @@ public final class Kitpvp extends JavaPlugin {
                 new LumberListener(this),
                 new ZeusListener(this),
                 new WitchListener(this),
-                new SoupListener(this));
+                new SoupListener(this),
+                new DolphinListener(this));
     }
 
     @Override
@@ -176,6 +174,7 @@ public final class Kitpvp extends JavaPlugin {
         kits.add(Trapper.getInstance());
         kits.add(Pyro.getInstance());
         kits.add(Tank.getInstance());
+        kits.add(Dolphin.getInstance());
 
         for (Kit kit : kits) {
             kitMap.put(kit.getView(), kit);

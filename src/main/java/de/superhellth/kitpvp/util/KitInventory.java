@@ -11,7 +11,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class KitInventory {
@@ -28,7 +27,7 @@ public class KitInventory {
         return instance;
     }
 
-    public KitInventory() {
+    private KitInventory() {
         inventory = Bukkit.createInventory(null, 18, "Select your Kit!");
         for (Kit kit : Kitpvp.getInstance().getKits()) {
             ItemStack kitItem = new ItemStack(kit.getView(), 1);
@@ -83,7 +82,7 @@ public class KitInventory {
         }
 
         if (kit.getEffects().size() > 0) {
-            if (desc.size() > 0 && desc.get(desc.size() - 1).contains("-")) {
+            if (desc.size() > 1) {
                 desc.add("");
             }
             desc.add("Effects:");
