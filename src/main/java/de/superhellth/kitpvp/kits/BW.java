@@ -92,6 +92,7 @@ public class BW extends Kit {
         quickAdd(Material.SANDSTONE, 64);
         quickAdd(Material.SANDSTONE, 64);
         quickAdd(Material.ARROW, 64);
+        quickAdd(Material.BRICK_SLAB, 10);
     }
 
     @Override

@@ -68,7 +68,7 @@ public class Game {
         giveAll(8, new KitSelector());
 
         // in seconds
-        int kitSelectionTime = 60;
+        int kitSelectionTime = 15;
         currentPhase = Phase.KIT_SELECTION;
         prepare1stCountdown(kitSelectionTime);
 
@@ -215,10 +215,14 @@ public class Game {
      */
     private void prepare1stCountdown(int kitSelectionTime) {
         broadcast(Progress.START_KS_1 + TimeManager.getSecondsAsString(kitSelectionTime) + Progress.START_KS_2);
-        broadcastDelayedMessage("The game starts in " + TimeManager.getSecondsAsString(kitSelectionTime / 2),
-                kitSelectionTime / 2);
-        broadcastDelayedMessage("The game starts in " + TimeManager.getSecondsAsString(kitSelectionTime / 4),
-                kitSelectionTime / 4 * 3 );
+        if (kitSelectionTime / 2 > 10) {
+            broadcastDelayedMessage("The game starts in " + TimeManager.getSecondsAsString(kitSelectionTime / 2),
+                    kitSelectionTime / 2);
+            if (kitSelectionTime / 4 > 10) {
+                broadcastDelayedMessage("The game starts in " + TimeManager.getSecondsAsString(kitSelectionTime / 4),
+                        kitSelectionTime / 4 * 3 );
+            }
+        }
         for (int c = 0; c < 10; c++) {
             broadcastDelayedMessage(ChatColor.BOLD + "" + (10 - c) + "",  kitSelectionTime - 10 + c);
         }
