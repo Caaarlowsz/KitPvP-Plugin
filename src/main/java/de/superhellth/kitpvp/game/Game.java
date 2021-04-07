@@ -68,7 +68,7 @@ public class Game {
         giveAll(8, new KitSelector());
 
         // in seconds
-        int kitSelectionTime = 15;
+        int kitSelectionTime = 60;
         currentPhase = Phase.KIT_SELECTION;
         prepare1stCountdown(kitSelectionTime);
 
