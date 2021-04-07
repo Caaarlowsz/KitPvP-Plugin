@@ -1,6 +1,5 @@
 package de.superhellth.kitpvp.main;
 
-import com.sun.istack.internal.Nullable;
 import de.superhellth.kitpvp.chat.Chat;
 import de.superhellth.kitpvp.commands.KitpvpCommand;
 import de.superhellth.kitpvp.game.Game;
@@ -127,7 +126,6 @@ public final class Kitpvp extends JavaPlugin {
     }
 
     // finds game player currently is in
-    @Nullable
     public Game getGame(Player player) {
         for (Game aGame : games) {
             if (aGame.playedBy(player)) {

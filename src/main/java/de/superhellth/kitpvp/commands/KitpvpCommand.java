@@ -1,6 +1,5 @@
 package de.superhellth.kitpvp.commands;
 
-import com.sun.istack.internal.Nullable;
 import de.superhellth.kitpvp.chat.stringSaves.CommandOutput;
 import de.superhellth.kitpvp.chat.stringSaves.Error;
 import de.superhellth.kitpvp.game.Game;
@@ -21,7 +20,6 @@ public class KitpvpCommand implements CommandExecutor {
     // The given arguments
     private String[] args;
     private Player player;
-    @Nullable
     private Game game;
 
     // constructor
