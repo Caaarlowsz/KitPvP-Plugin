@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class BWListener extends KitListener {
 
@@ -35,43 +36,46 @@ public class BWListener extends KitListener {
     public void onItemUse(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (isPlayerFighting(player, BW.getInstance())) {
-            if ((event.getItem() != null) && (event.getItem().getType() == Material.BRICK_SLAB)) {
-                Game game = plugin.getGame(player);
-                Location playerLoc = player.getLocation();
-                Location currentLoc = new Location(playerLoc.getWorld(), playerLoc.getBlockX(), playerLoc.getBlockY() - 1,
-                        playerLoc.getBlockZ());
-                int yaw = Math.round(player.getLocation().getYaw() / 90) * 90;
-                int dx = 0;
-                int dz = 0;
-                switch (yaw) {
-                    case 90:
-                    case -270:
-                        dx = -1;
-                        break;
+            if (event.getItem() != null) {
+                ItemStack item = event.getItem();
+                if (item.getType() == Material.BRICK_SLAB && item.getItemMeta().hasLore()) {
+                    Game game = plugin.getGame(player);
+                    Location playerLoc = player.getLocation();
+                    Location currentLoc = new Location(playerLoc.getWorld(), playerLoc.getBlockX(), playerLoc.getBlockY() - 1,
+                            playerLoc.getBlockZ());
+                    int yaw = Math.round(player.getLocation().getYaw() / 90) * 90;
+                    int dx = 0;
+                    int dz = 0;
+                    switch (yaw) {
+                        case 90:
+                        case -270:
+                            dx = -1;
+                            break;
 
-                    case 180:
-                    case -180:
-                        dz = -1;
-                        break;
+                        case 180:
+                        case -180:
+                            dz = -1;
+                            break;
 
-                    case 270:
-                    case -90:
-                        dx = 1;
-                        break;
+                        case 270:
+                        case -90:
+                            dx = 1;
+                            break;
 
-                    case 0:
-                    case -360:
-                    case 360:
-                        dz = 1;
-                        break;
+                        case 0:
+                        case -360:
+                        case 360:
+                            dz = 1;
+                            break;
+                    }
+                    for (int i = 1; i < 6; i++) {
+                        Location blockLoc = new Location(currentLoc.getWorld(), currentLoc.getBlockX() + dx * i,
+                                currentLoc.getBlockY(), currentLoc.getBlockZ() + dz * i);
+                        setBlock(player, blockLoc, game, i * 2);
+                    }
+                    player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
+                    event.setCancelled(true);
                 }
-                for (int i = 1; i < 6; i++) {
-                    Location blockLoc = new Location(currentLoc.getWorld(), currentLoc.getBlockX() + dx * i,
-                            currentLoc.getBlockY(), currentLoc.getBlockZ() + dz * i);
-                    setBlock(player, blockLoc, game, i * 2);
-                }
-                player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
-                event.setCancelled(true);
             }
         }
     }

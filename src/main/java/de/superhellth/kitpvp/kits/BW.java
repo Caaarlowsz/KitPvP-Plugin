@@ -92,7 +92,11 @@ public class BW extends Kit {
         quickAdd(Material.SANDSTONE, 64);
         quickAdd(Material.SANDSTONE, 64);
         quickAdd(Material.ARROW, 64);
-        quickAdd(Material.BRICK_SLAB, 10);
+        ItemStack bridges = new ItemStack(Material.BRICK_SLAB, 10);
+        ItemMeta bridgeMeta = bridges.getItemMeta();
+        bridgeMeta.setLore(Arrays.asList("Gomme bw bridges"));
+        bridges.setItemMeta(bridgeMeta);
+        items.add(bridges);
     }
 
     @Override

@@ -204,11 +204,9 @@ public class KitpvpCommand implements CommandExecutor {
             Chat.sendMessage(player, Error.GAME_RUNNING);
             return;
         }
-        invitedTo.addPlayer(player);
         Chat.sendMessage(player, CommandOutput.ACCEPTED_INVITE);
-        for (Player player : invitedTo.getMembers()) {
-            Chat.sendMessage(player, player.getDisplayName() + CommandOutput.PLAYER_JOINED);
-        }
+        invitedTo.broadcast(player.getDisplayName() + CommandOutput.PLAYER_JOINED);
+        invitedTo.addPlayer(player);
         invitedTo.getInvited().remove(player);
     }
 
